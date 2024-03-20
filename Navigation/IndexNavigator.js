@@ -1,59 +1,102 @@
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import IndexScreen from "../src/Home/IndexScreen";
-import MemberScreen from "../src/Home/MemberScreen";
-import SettingScreen from "../src/Home/SettingScreen";
+import CarriageScreen from "../src/Home/CarriageScreen";
+import EmergencyScreen from "../src/Home/EmergencyScreen";
+import FormScreen from "../src/Home/FormScreen";
+import IndexScreen from "../src/Home/IndexScreen";
+import VehiclecyScreen from "../src/Home/VehicleScreen";
 
-export default function IndexNavigator() {
+export default function IndexNavigator({navigation}) {
+  // const dispatch= useDispatch()
   const Tab = createBottomTabNavigator();
-
+  // const handleLogout =()=>{
+  //   dispatch(setLogout())
+  //   navigation.navigate("Login");
+  // }
   return (
-    <View className="flex-1 items-center justify-center">
-    <Text>我是登入後首頁</Text>
-    <TouchableOpacity
-  className="bg-red-600 rounded-lg w-10/12 m-3"
-  onPress={handleLogout}
-  >
-  <Text className="text-white text-xl m-3 text-center">登出</Text>
-    </TouchableOpacity>
- 
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "gray",
-        tabBarStyle: { height: 60, paddingBottom: 10 },
-      })}
-    >
-      <Tab.Screen
-        name="Member"
-        component={MemberScreen}
-        options={{
-          title: "會員管理",
-          unmountOnBlur: true,
-          tabBarIcon: ({ focused, color, size }) =>
-            !focused ? (
-              <MaterialIcons name="people" size={size} color={color} />
-            ) : (
-              <MaterialIcons name="people-outline" size={size} color={color} />
-            ),
-        }}
-      />
-      <Tab.Screen
-        name="Setting"
-        component={SettingScreen}
-        options={{
-          title: "功能表",
-          unmountOnBlur: true,
-          tabBarIcon: ({ focused, color, size }) =>
-            !focused ? (
-              <Ionicons name="md-settings" size={size} color={color} />
-            ) : (
-              <Ionicons name="md-settings-outline" size={size} color={color} />
-            ),
-        }}
-      />
-    </Tab.Navigator>
-    </View>
+
+
+     <Tab.Navigator
+     screenOptions={({ route }) => ({
+       headerShown: false,
+       tabBarActiveTintColor: "tomato",
+       tabBarInactiveTintColor: "gray",
+       tabBarStyle: { height: 60, paddingBottom: 10 },
+     })}
+   >
+    <Tab.Screen
+       name="Index"
+       component={IndexScreen}
+       options={{
+         title: "首頁",
+         unmountOnBlur: true,
+         tabBarIcon: ({ focused, color, size }) =>
+           !focused ? (
+            <Ionicons name="people" size={24} color="black" />
+           ) : (
+             <Ionicons name="people-outline" size={size} color={color} />
+           ),
+       }}
+     />
+
+
+     <Tab.Screen
+       name="Carriage"
+       component={CarriageScreen}
+       options={{
+         title: "運送通報",
+         unmountOnBlur: true,
+         tabBarIcon: ({ focused, color, size }) =>
+           !focused ? (
+             <Ionicons name="people" size={size} color={color} />
+           ) : (
+             <Ionicons name="people-outline" size={size} color={color} />
+           ),
+       }}
+     />
+     <Tab.Screen
+       name="Form"
+       component={FormScreen}
+       options={{
+         title: "表單查詢",
+         unmountOnBlur: true,
+         tabBarIcon: ({ focused, color, size }) =>
+           !focused ? (
+             <Ionicons name="people" size={size} color={color} />
+           ) : (
+             <Ionicons name="people-outline" size={size} color={color} />
+           ),
+       }}
+     />
+     <Tab.Screen
+       name="Emergency"
+       component={EmergencyScreen}
+       options={{
+         title: "緊急通報",
+         unmountOnBlur: true,
+         tabBarIcon: ({ focused, color, size }) =>
+           !focused ? (
+             <Ionicons name="people" size={size} color={color} />
+           ) : (
+             <Ionicons name="people-outline" size={size} color={color} />
+           ),
+       }}
+     />
+     <Tab.Screen
+       name="Vehicle"
+       component={VehiclecyScreen}
+       options={{
+         title: "車輛初審",
+         unmountOnBlur: true,
+         tabBarIcon: ({ focused, color, size }) =>
+           !focused ? (
+             <Ionicons name="people" size={size} color={color} />
+           ) : (
+             <Ionicons name="people-outline" size={size} color={color} />
+           ),
+       }}
+     />
+   </Tab.Navigator>
   );
 }
