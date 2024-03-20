@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">毒性及關注化學物質小量運送軌跡紀錄系統</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_password">密碼</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">需要輸入帳號密碼</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">
+        "Contacts permissions are needed for providing email completions."
+    </string>
+    <string name="action_sign_in">登入</string>
+    <string name="prompt_email">帳號</string>
+    <string name="google_maps_key">AIzaSyA6aeLgShqpXMbcwJHpiYofk10aFKKx3KQ</string>
+    <string name="checkbox">以後不再顯示</string>
+    <string name="toGoogle">使用者於本平台輸入密碼登入後，須透過介面確認相關資訊無誤(駕駛人姓名、車號)，且前述資料非屬支付工具(如信用卡卡號及驗證資料)等高風險資訊，故本平台未於介面就前述資訊進行遮蔽。
+使用者應自行確實保管所使用之裝置、設備及相關登入資訊之安全，防止他人窺視、非法使用、取得登入資訊、竄改基本身分資料、損毀紀錄等情形。如使用者發現前述情事，應立即通知本平台停止相關服務並採取防範措施(包括但不限於申請暫停帳號權限、變更密碼等)，本平台並將協助調查釐清冒用或盜用之事實，惟若因使用者故意或過失所致生損害，應由使用者自行承擔。</string>
+    <string name="settitle">隱私權宣告</string>
+</resources>

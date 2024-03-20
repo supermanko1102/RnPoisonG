@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/bpSysListno"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="top|center_vertical"
+            android:gravity="left"
+            android:text="bpSysListno"
+            android:textColor="#1E9D44"
+            android:textSize="16sp"
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:id="@+id/tvReportTime"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="tvReportTime"
+            android:textColor="#F44336"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
