@@ -1,10 +1,12 @@
 import { Text, View } from "react-native";
-
+import Banner from "../Component/Banner";
 export default function VehicleScreen(){
-
-    <View>
-        <Text>我是車輛</Text>
-        
-    </View>
-
+    return (   
+        <View
+        className="flex-1"
+        >
+        <Banner/> 
+            <Text>我是車輛</Text>
+        </View>
+    )
 }

@@ -1,9 +1,12 @@
 import { Text, View } from "react-native";
-
+import Banner from "../Component/Banner";
 export default function FormScreen(){
-
-    <View>
-        <Text>我是表單查詢</Text>
-    </View>
-
+    return (   
+        <View
+        className="flex-1"
+        >
+        <Banner/> 
+            <Text>我是表單</Text>
+        </View>
+    )  
 }

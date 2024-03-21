@@ -1,35 +1,19 @@
 import React, { useState } from 'react';
 import { Image, ImageBackground, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useDispatch, useSelector } from 'react-redux';
-import { setLogin } from '../store/modules/userSlice';
+import { useDispatch } from 'react-redux';
+import { setLoginStatus } from '../store/modules/loginSlice';
 
 export default function LoginScreen({navigation}){
-    //先寫一下
-    const state = useSelector(state=>state.user)
+    //如果需要從元件中去改變store裡面的數據需要 dispatch
+    // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
     const dispatch =useDispatch()
 
     const [account, setAccount] = useState('');
     const [password, setPassword] = useState('');
-    // console.log(navigation)
-    let UserObject={
-        IsrememberMe:true,
-    };
-    const [loginInfo,SetloginInfo]= useState(UserObject)
+
     //登入邏輯
     const handleLogin = () => {
-        //取得input值
-        dispatch(setLogin({
-            account: account,
-            password: password
-        }))
-        // if (loginInfo.Account === "" || loginInfo.Password === "") {
-        //     Alert.alert("登入失敗","請輸入使用者資訊");
-        //     return false;
-        //   } else{
-        //     Alert.alert("訊息", "登入成功!");
-            
-        //   }
-
+        dispatch(setLoginStatus(true))
           navigation.navigate("MainIndex");
       };
       
@@ -39,7 +23,7 @@ export default function LoginScreen({navigation}){
             source={require('../../Img/bg_function.png')}
             className="h-screen flex-1"   
             >   
-            <View className="flex flex-row mt-[40]">
+            <View className=" flex-row mt-[40]">
                 <Image
                 source={require('../../Img/環境部logo.png')}
                 resizeMode="contain"
@@ -123,8 +107,8 @@ export default function LoginScreen({navigation}){
                 
                 <Text className="pt-3 pl-5">記憶帳號</Text>
                 <Switch 
-                value={loginInfo.IsrememberMe}
-                onValueChange={(IsrememberMe) => SetloginInfo({...loginInfo,IsrememberMe:IsrememberMe})}
+                // value={loginInfo.IsrememberMe}
+                // onValueChange={(IsrememberMe) => SetloginInfo({...loginInfo,IsrememberMe:IsrememberMe})}
                  />
             </View>
 

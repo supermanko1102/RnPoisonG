@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
-import { setLogout } from "../store/modules/userSlice";
+import Banner from "../Component/Banner";
+import { setLogout } from "../store/modules/loginSlice";
 export default function IndexScreen({ navigation }) {
   const dispatch= useDispatch()
   //登出功能
@@ -11,9 +12,10 @@ export default function IndexScreen({ navigation }) {
   }
   return (
     
-    <View className="flex-1 items-center justify-center">
-      <Text>我是登入後首頁</Text>
-      <TouchableOpacity
+    <View className="flex-1">
+      <Banner/>
+      
+    <TouchableOpacity
     className="bg-red-600 rounded-lg w-10/12 m-3"
     onPress={handleLogout}
     >
@@ -23,3 +25,5 @@ export default function IndexScreen({ navigation }) {
 
   );
 }
+
+

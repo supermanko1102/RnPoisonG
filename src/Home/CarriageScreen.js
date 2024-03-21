@@ -1,10 +1,14 @@
 import { Text, View } from "react-native";
+import Banner from "../Component/Banner";
 
 export default function CarriageScreen(){
-
-    <View>
-        <Text>我是運貨</Text>
-        
+return (   
+    <View
+    className="flex-1"
+    >
+    <Banner/> 
+        <Text>我是運輸</Text>
     </View>
-
+)
 }
+

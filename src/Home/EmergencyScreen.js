@@ -1,10 +1,13 @@
 import { Text, View } from "react-native";
+import Banner from "../Component/Banner";
 
 export default function EmergencyScreen(){
-
-    <View>
-        <Text>我是緊急通報</Text>
-        
-    </View>
-
+    return (   
+        <View
+        className="flex-1"
+        >
+        <Banner/> 
+            <Text>我緊急</Text>
+        </View>
+    )
 }

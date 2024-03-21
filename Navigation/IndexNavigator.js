@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Fontisto, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import IndexScreen from "../src/Home/IndexScreen";
 import CarriageScreen from "../src/Home/CarriageScreen";
@@ -15,8 +15,6 @@ export default function IndexNavigator({navigation}) {
   //   navigation.navigate("Login");
   // }
   return (
-
-
      <Tab.Navigator
      screenOptions={({ route }) => ({
        headerShown: false,
@@ -33,14 +31,12 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-            <Ionicons name="people" size={24} color="black" />
+            <Ionicons name="home" size={24} color="black" />
            ) : (
-             <Ionicons name="people-outline" size={size} color={color} />
+             <Ionicons name="home-outline" size={size} color={color} />
            ),
        }}
      />
-
-
      <Tab.Screen
        name="Carriage"
        component={CarriageScreen}
@@ -49,9 +45,9 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-             <Ionicons name="people" size={size} color={color} />
+            <Ionicons name="car" size={24} color="black" />
            ) : (
-             <Ionicons name="people-outline" size={size} color={color} />
+            <Ionicons name="car-outline" size={24} color="black" />
            ),
        }}
      />
@@ -63,9 +59,9 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-             <Ionicons name="people" size={size} color={color} />
+            <MaterialCommunityIcons name="format-align-justify" size={24} color="black" />
            ) : (
-             <Ionicons name="people-outline" size={size} color={color} />
+            <AntDesign name="form" size={24} color="black" />
            ),
        }}
      />
@@ -77,9 +73,9 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-             <Ionicons name="people" size={size} color={color} />
+            <MaterialIcons name="contact-emergency" size={24} color="black" />
            ) : (
-             <Ionicons name="people-outline" size={size} color={color} />
+            <MaterialIcons name="emergency" size={24} color="black" />
            ),
        }}
      />
@@ -91,9 +87,9 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-             <Ionicons name="people" size={size} color={color} />
+            <MaterialIcons name="rate-review" size={24} color="black" />
            ) : (
-             <Ionicons name="people-outline" size={size} color={color} />
+            <Fontisto name="preview" size={24} color="black" />
            ),
        }}
      />

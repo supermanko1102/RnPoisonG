@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userSlice from './modules/userSlice'
+import loginSlice from './modules/loginSlice'
 
 const store=configureStore({
     reducer:{
         //key :value
-       user: userSlice,
+       login: loginSlice,
     },
 })
 

@@ -7,12 +7,13 @@ import store from './src/store/store';
 
 export default function App() {
   return (
-    // 記得要把它撐開 不然會沒畫面
-    <SafeAreaView style={styles.container}>
-      <Provider store={store}>
+    <Provider store={store}>
+    {/* //記得要把它撐開 不然會沒畫面 */}
+      <SafeAreaView style={styles.container}>
         <AppNavigator />
-      </Provider>
-    </SafeAreaView>
+      </SafeAreaView>
+    </Provider>
+
   );
 }
 
