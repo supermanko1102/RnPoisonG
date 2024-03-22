@@ -14,6 +14,7 @@ export default function LoginScreen({navigation}){
     //登入邏輯
     const handleLogin = () => {
         dispatch(setLoginStatus(true))
+        // console.log('LoginNavigation',navigation)
           navigation.navigate("MainIndex");
       };
       
