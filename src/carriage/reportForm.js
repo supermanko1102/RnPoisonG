@@ -62,6 +62,7 @@ export default function ReportForm(){
                 </View>
             </View>
             
+            
             <Footer/>
         </View>
     )

@@ -2,13 +2,13 @@ import { View } from "react-native";
 import { Button, Text } from 'react-native-paper';
 import Banner from "../Component/Banner";
 import Footer from "../Component/Footer";
-
-
+import MyMapScreen from "../Component/MyMapScreen";
 
 export default function StartReport({navigation}){
     const handleReportForm = ()=>{
         navigation.navigate('ReportForm')
     }
+
     return (        
         <View 
         className="flex-1" >
@@ -48,6 +48,13 @@ export default function StartReport({navigation}){
                         選取
                     </Button>
                 </View>
+                {/* Begin::MapView */}
+                <View 
+                className='w-11/12 self-center mt-2 mb-2'
+                style={{flex:1}}>
+                    <MyMapScreen/>
+                </View>
+                {/* End:MapView */}
             </View>
             <Footer/>
         </View>

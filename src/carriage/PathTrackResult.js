@@ -2,6 +2,7 @@ import { View } from "react-native"
 import { Text } from "react-native-paper"
 import Banner from "../Component/Banner"
 import Footer from "../Component/Footer"
+import MyMapScreen from "../Component/MyMapScreen"
 export default function PathTrackResult(){
 
     return(
@@ -43,6 +44,15 @@ export default function PathTrackResult(){
                 迄運申報時間: 2024/01/01 14:04:02
             </Text>
         </View>
+
+
+        {/* Begin::MapView */}
+        <View 
+                className='w-11/12 self-center mt-2 mb-2'
+                style={{flex:1}}>
+                    <MyMapScreen/>
+                </View>
+                {/* End:MapView */}
         </View>
         <Footer/>
         </View>
