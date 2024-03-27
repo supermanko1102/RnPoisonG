@@ -7,7 +7,6 @@ import SimpleForm from '../src/Form/SimpleForm';
 import LoginScreen from '../src/Home/LoginScreen';
 import PathTracResult from '../src/carriage/PathTrackResult';
 import PathTracking from '../src/carriage/PathTracking';
-import ReportForm from '../src/carriage/reportForm';
 import StartReport from '../src/carriage/startReport';
 import IndexNavigator from './IndexNavigator';
 export default function AppNavigator() {
@@ -30,7 +29,6 @@ export default function AppNavigator() {
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="MainIndex" component={IndexNavigator} />
                 <Stack.Screen name="StartReport" component={StartReport} />
-                <Stack.Screen name="ReportForm" component={ReportForm} />
                 <Stack.Screen name="PathTracking" component={PathTracking} />
                 <Stack.Screen name="PathTracResult" component={PathTracResult} />
                 <Stack.Screen name="SimpleForm" component={SimpleForm} />
