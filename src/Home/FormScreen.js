@@ -7,10 +7,11 @@ export default function FormScreen({navigation}){
     }
     const Data=[
         {id:1,name:'A0000000000000001'},
-        {id:2,name:'A0000000000000001'},
-        {id:3,name:'A0000000000000001'},
-        {id:4,name:'A0000000000000001'},
+        {id:2,name:'A0000000000000002'},
+        {id:3,name:'A0000000000000003'},
+        {id:4,name:'A0000000000000004'},
     ]
+    
     //取得渲染函數
     const renderItem= ({item})=>(
         <View

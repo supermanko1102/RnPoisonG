@@ -12,7 +12,7 @@ export default function ReportItem({ item }) {
     //起點反灰
     const [startAble, setStartAble] = useState(false);
     //迄點反灰
-    const [endAble, setEndtAble] = useState(false);
+    const [endAble, setEndtAble] = useState(true);
     //設定是否startchecked
     const [startchecked, setStartChecked] = useState(false);
     //設定是否endchecked
@@ -50,13 +50,15 @@ export default function ReportItem({ item }) {
         console.log('我要開始申報拉');
         //起點反灰
         setStartAble(true);
+        //迄點不反灰
+        setEndtAble(false)
         //dialog不見
         toggleDialogStart(false);
         //顯示勾勾
         setStartChecked(true)
         //顯示起點按鈕
         setShowStartButton(true)
-        //顯示結束時間
+        //顯示開始時間
         setShowStartTime(true)
     };
     const handleAgreeEnd = ()=>{
@@ -75,13 +77,34 @@ export default function ReportItem({ item }) {
         setEndtAble(true)
     }
     const handleCancelStart = ()=>{
-        console.log('我要取消起點申報拉');
+        console.log('我要同意取消起點申報拉');
+        //dialog 不見
+        toggleDialogStartCancel(false)
+        //起點反灰 disable要設成false
+        setStartAble(false)
+        //不顯示起點勾勾
+        setStartChecked(false)
+        //起點時間隱藏
+        setShowStartTime(false)
+        //迄點反灰
+        setEndtAble(true)
+
 
     }
 
     const handleCancelEnd = ()=>{
         console.log('我要取消迄點申報拉');
-
+        //dialog 不見
+        toggleDialogEndCancel(false)
+        //迄點不反灰
+        setEndtAble(false)
+        //迄點不顯示勾勾
+        setEndChecked(false)
+        //把起點的按鈕顯示出來 迄點的按鈕隱藏
+        setShowStartButton(true)
+        setShowEndButton(false)
+        //迄點時間隱藏
+        setShowEndtTime(false)
     }
 
 
@@ -118,14 +141,14 @@ export default function ReportItem({ item }) {
             <View className=''>
                 <Button 
                 style={{display: showStartButton ?'flex':'none'}}
-                onPress={handleCancelStart}
+                onPress={toggleDialogStartCancel}
                 >
                 
                     <Text>取消起點申報</Text>
                 </Button>
                 <Button 
                 style={{display: showEndButton ?'flex':'none'}}
-                onPress={handleCancelEnd}
+                onPress={toggleDialogEndCancel}
                 >
                     <Text>取消迄點申報</Text>
                 </Button>
@@ -147,6 +170,23 @@ export default function ReportItem({ item }) {
                     <Dialog.Button title="同意" onPress={handleAgreeEnd}/>
                 </Dialog.Actions>
             </Dialog>
+            
+            <Dialog isVisible={visibleStartCancel}>
+                <Dialog.Title title={item.name + "是否同意要取消起點申報"}/>
+                <Dialog.Actions>
+                    <Dialog.Button title="不同意" onPress={toggleDialogStartCancel}/>
+                    <Dialog.Button title="同意" onPress={handleCancelStart}/>
+                </Dialog.Actions>
+            </Dialog>
+
+            <Dialog isVisible={visibleEndCancel}>
+                <Dialog.Title title={item.name + "是否同意要取消迄點申報"}/>
+                <Dialog.Actions>
+                    <Dialog.Button title="不同意" onPress={toggleDialogEndCancel}/>
+                    <Dialog.Button title="同意" onPress={handleCancelEnd}/>
+                </Dialog.Actions>
+            </Dialog>
+            
             
         </View>
     );

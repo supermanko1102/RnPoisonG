@@ -1,7 +1,8 @@
-import { Button, Dialog } from "@rneui/themed";
+import { MaterialIcons } from '@expo/vector-icons';
+import { Dialog } from "@rneui/themed";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, MD2Colors, Text } from "react-native-paper";
 import Banner from "../Component/Banner";
 export default function IndexScreen({ navigation }) {
@@ -24,17 +25,17 @@ export default function IndexScreen({ navigation }) {
         //Get NewDataTitle
         const GetNewData = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
           params: {
-            Function: 'LatestNewsOne',
+            Function: 'LatestNews',
             ServiceKey: 'V9achV7sd8AK',
           }
         });
         // begin::針對後端api傳的datatime做處理  
-        const modifiedNewsOnelist = GetNewData.data.NewsOnelist.map(item => ({
+        const modifiedNews20list = GetNewData.data.News20List.map(item => ({
           ...item,
           StartDate: item.StartDate.replace("T00:00:00", "")
         }));
         // end::針對後端api傳的datatime做處理  
-        setData(modifiedNewsOnelist);
+        setData(modifiedNews20list);
         // console.log('第一支api',modifiedNewsOnelist)
         //After data loading
         setLoading(false)
@@ -82,19 +83,42 @@ export default function IndexScreen({ navigation }) {
   
   const renderItem=({item})=>(
     <View
-    style={styles.buttonContainer}
-    className='mt-6'
     >
-      <Button
-        title={`${item.StartDate}     ${item.Subject}`}
+      {/* <Button
+        className='justify-start'
         onPress={
           ()=>{
             setCurrentSerNo(item.SerNo); // 設置當前a拿到的serno
             fetchDetailData(item.SerNo); // 調用B API
           }
         }
-        buttonStyle={styles.button}
-      />
+      >
+        <Text className='text-white ' >{item.StartDate}</Text>
+        <Text>{item.Subject}</Text>
+      </Button> */}
+
+
+      <TouchableOpacity
+      onPress={
+        ()=>{
+          setCurrentSerNo(item.SerNo); // 設置當前a拿到的serno
+          fetchDetailData(item.SerNo); // 調用B API
+        }
+      }
+      className='flex-row m-6 bg-slate-200 rounded-full p-2'
+      >
+        <View className='w-3/12 items-center self-center'>       
+          <Text className='text-2xl'>{item.StartDate}</Text>
+        </View>
+        <View className='w-1/12 items-center self-center'>
+        <MaterialIcons name="campaign" size={36} color="black"/>
+        </View>
+        <View className='w-8/12  self-center'>
+        
+          <Text className='text-2xl' >{item.Subject}</Text>
+        </View>
+        
+      </TouchableOpacity>
     </View>
   )
   return (
@@ -105,16 +129,13 @@ export default function IndexScreen({ navigation }) {
         className="text-4xl self-center mt-4">
             最新消息
         </Text>
-      <View 
-      className=''
-      >
+      
         <FlatList
           data={data} // data
           renderItem={renderItem} // 選染列表的函數
           keyExtractor={item => item.SerNo} // key
           />
-      </View>
-
+      
       <Dialog
       isVisible={visible}
       onBackdropPress={toggleDialog}
@@ -122,7 +143,7 @@ export default function IndexScreen({ navigation }) {
         {/* 需要先加一個判斷才不會造成map not defefind問題 */}
         {detailData.Newscontent && detailData.Newscontent.map((content, index) => (
           <View key={index}>
-            <Dialog.Title title={content.Subject + 'SerNo: '+ currentSerNo}/>
+            <Dialog.Title title={content.Subject}/>
             <Text>{content.NewsContent}</Text>
           </View>
       ))}
@@ -130,15 +151,3 @@ export default function IndexScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-button: {
-  borderRadius: 6,
-  margin: 20,
-},
-buttonContainer: {
-  margin: 20,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-});
