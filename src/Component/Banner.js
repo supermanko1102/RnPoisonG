@@ -1,10 +1,19 @@
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 export default function Banner(){
+
+
     // 因為是component function 這邊直接調用navigation會失敗 所以需要用useNavigaton hook去獲取
     const navigation =useNavigation()
+
+    const deviceNumber = useSelector(state => state.login.deviceNumber);
+    const userName = useSelector(state => state.login.userName);
+
+    
+
     const handleLogout = ()=>{
         // console.log('BannerNavigation',navigation)
         navigation.navigate("Login");
@@ -23,18 +32,18 @@ export default function Banner(){
                 <FontAwesome name="user" size={30} color="black" />
                 <Text
                 className="text-xl mr-10"
-                >林國強</Text>
+                >{userName}</Text>
 
                 <FontAwesome5 name="car" size={30} color="black" />
                 <Text
                 className="text-xl"
-                >ABC-001</Text>
+                >{deviceNumber}</Text>
 
                 <TouchableOpacity
-                className="bg-red-600 rounded-lg ml-8"
+                className="bg-gray-300 rounded-lg ml-8"
                 onPress={handleLogout}
                 >
-                    <Text>登出</Text>
+                    <Text className='text-xl text-red-600'>登出</Text>
                 </TouchableOpacity>
             </View>
 

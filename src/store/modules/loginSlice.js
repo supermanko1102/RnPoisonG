@@ -1,24 +1,43 @@
 import { createSlice } from "@reduxjs/toolkit";
-const initialState ={
-    isLogin: false
-};
+
 
 const loginSlice  = createSlice({
     name:"login",
     //initial data
-    initialState,
+    initialState:{
+    isLogin: false,
+    token: null,
+    error: null,
+    deviceNumber:'',
+    userName:''
+    },
     //同步方法
     reducers:{
-        setLoginStatus(state,action){
-            state.isLogin = action.payload;
+        loginSuccess: (state, action) => {
+            state.isLogin = true;
+            state.token = action.payload;
+            state.error = null;
         },
-        setLogout(state) {
+        loginFailure: (state, action) => {
             state.isLogin = false;
-          }
+            state.token = null;
+            state.error = action.payload;
+        },
+        logout: (state) => {
+            state.isLogin = false;
+            state.token = null;
+            state.error = null;
+        },
+        setDeviceNumber(state, action) {
+            state.deviceNumber = action.payload;
+        },
+        setUserName(state, action) {
+            state.userName = action.payload;
+        }
     }
 })
 //解構出創建action對象的函數  {action creater}
-const {setLoginStatus,setLogout } = loginSlice.actions
+const {loginSuccess, loginFailure,logout,setDeviceNumber,setUserName} = loginSlice.actions
 
 
 // const fetchLoginList = () => {
@@ -41,5 +60,5 @@ const {setLoginStatus,setLogout } = loginSlice.actions
 // get reducer 
 const userReducer = loginSlice.reducer
 //export action and reducer
-export { setLoginStatus, setLogout };
+export { loginFailure, loginSuccess, logout, setDeviceNumber, setUserName };
 export default userReducer

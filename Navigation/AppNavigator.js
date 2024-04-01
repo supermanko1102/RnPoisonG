@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 import Banner from '../src/Component/Banner';
 import Footer from '../src/Component/Footer';
+import AccidentRecord from '../src/Emergency/AccidentRecord';
+import EmergencyAccident from '../src/Emergency/EmergencyAccident';
 import SimpleForm from '../src/Form/SimpleForm';
 import LoginScreen from '../src/Home/LoginScreen';
 import PathTracResult from '../src/carriage/PathTrackResult';
@@ -32,6 +34,8 @@ export default function AppNavigator() {
                 <Stack.Screen name="PathTracking" component={PathTracking} />
                 <Stack.Screen name="PathTracResult" component={PathTracResult} />
                 <Stack.Screen name="SimpleForm" component={SimpleForm} />
+                <Stack.Screen name="EmergencyAccident" component={EmergencyAccident} />
+                <Stack.Screen name="AccidentRecord" component={AccidentRecord} />
 
             </Stack.Navigator>
         </NavigationContainer>

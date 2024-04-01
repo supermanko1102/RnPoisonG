@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, MD2Colors, Text } from "react-native-paper";
 import Banner from "../Component/Banner";
-export default function IndexScreen({ navigation }) {
+export default function IndexScreen({ navigation}) {
   //dialog
   const [visible, setVisible] = useState(false);
   //把從api拿到的資料存入data
@@ -84,20 +84,6 @@ export default function IndexScreen({ navigation }) {
   const renderItem=({item})=>(
     <View
     >
-      {/* <Button
-        className='justify-start'
-        onPress={
-          ()=>{
-            setCurrentSerNo(item.SerNo); // 設置當前a拿到的serno
-            fetchDetailData(item.SerNo); // 調用B API
-          }
-        }
-      >
-        <Text className='text-white ' >{item.StartDate}</Text>
-        <Text>{item.Subject}</Text>
-      </Button> */}
-
-
       <TouchableOpacity
       onPress={
         ()=>{
@@ -108,14 +94,14 @@ export default function IndexScreen({ navigation }) {
       className='flex-row m-6 bg-slate-200 rounded-full p-2'
       >
         <View className='w-3/12 items-center self-center'>       
-          <Text className='text-2xl'>{item.StartDate}</Text>
+          <Text className='text-xl'>{item.StartDate}</Text>
         </View>
         <View className='w-1/12 items-center self-center'>
         <MaterialIcons name="campaign" size={36} color="black"/>
         </View>
-        <View className='w-8/12  self-center'>
+        <View className='w-8/12 ml-2 self-center'>
         
-          <Text className='text-2xl' >{item.Subject}</Text>
+          <Text className='text-xl' >{item.Subject}</Text>
         </View>
         
       </TouchableOpacity>

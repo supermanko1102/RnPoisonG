@@ -10,11 +10,11 @@ export default function CarriageScreen({navigation}){
     }
 return (   
     <View
-    className="flex-1"
+   
     >
         <Banner/> 
         <Button mode="contained"
-        className="mt-20" 
+        className="mt-40" 
         onPress={handleStartReport}
         >
             <Text className="text-white text-xl px-5 py-3">開始申報</Text>

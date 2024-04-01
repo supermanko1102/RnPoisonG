@@ -1,22 +1,67 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Image, ImageBackground, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useDispatch } from 'react-redux';
-import { setLoginStatus } from '../store/modules/loginSlice';
+import { setDeviceNumber, setUserName } from '../store/modules/loginSlice';
 
+import { Alert, Image, ImageBackground, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useDispatch } from 'react-redux';
 export default function LoginScreen({navigation}){
     //如果需要從元件中去改變store裡面的數據需要 dispatch
     // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
     const dispatch =useDispatch()
 
     const [account, setAccount] = useState('');
+    const [deviceNumber,setDeviceNumberLocal] = useState('')
     const [password, setPassword] = useState('');
+    const [rememberUser,setRememberUser]= useState(false)
+    const [userName,SetUserNameLocal]= useState('')
 
-    //登入邏輯
-    const handleLogin = () => {
-        dispatch(setLoginStatus(true))
+
+    //begin::登入邏輯
+    const handleLogin = async() => {
+        // dispatch(setLoginStatus(true))
         // console.log('LoginNavigation',navigation)
-          navigation.navigate("MainIndex");
-      };
+        dispatch(setDeviceNumber(deviceNumber));
+        
+
+        //begin::處理登入API
+      const fetchLogApi = async()=>{
+        try{
+            const response = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
+                params: {
+                  Function: 'Login',
+                  ServiceKey: 'V9achV7sd8AK',
+                  account: account,
+                  password:password,
+
+                }
+              })
+              console.log('username',response.data.IsProcessOK)
+              if(response.data.IsProcessOK){
+                navigation.navigate("MainIndex");
+                SetUserNameLocal(response.data.LoginName)
+                console.log('userName',userName)
+                dispatch(setUserName(userName));
+              }else{
+                Alert.alert('登入失敗',response.data.Message)
+              }
+        } catch(error){
+            Alert.alert('登入失敗','網路錯誤,請稍後再試')
+            dispatch(loginFailure('Network error'));
+            
+        }
+      }; 
+      //end:: API  
+
+      fetchLogApi();
+    }
+    //end:: 登入邏輯
+
+    //begin::記憶帳號
+    const handleRememberUser = ()=>{
+        setRememberUser(!rememberUser)
+    }
+    //end::記憶帳號
+    
       
     return (
         <View className="flex-1">
@@ -66,7 +111,24 @@ export default function LoginScreen({navigation}){
                         className="flex-initial w-64 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] ml-4"
                     />
                 </View>
-                            <View className="flex flex-row justify-center py-2">
+                <View className="flex flex-row justify-center py-2">
+                    <Image
+                    source={require('../../Img/車輛.png')}
+                    resizeMode="contain"
+                    style={styles.logo}
+                    className="flex-none "
+                    ></Image>
+                    <TextInput
+                        value={deviceNumber}
+                        onChangeText={(text) => setDeviceNumberLocal(text)}
+                        placeholder={'車輛號碼'}
+
+                        className="flex-initial w-64 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] ml-4"
+                    />
+                </View>
+                
+                
+                <View className="flex flex-row justify-center py-2">
                     <Image
                     source={require('../../Img/密碼.png')}
                     resizeMode="contain"
@@ -104,8 +166,8 @@ export default function LoginScreen({navigation}){
                 <View className="flex flex-row justify-center">
                     <Text className="pt-3 pl-5">記憶帳號</Text>
                     <Switch 
-                    // value={loginInfo.IsrememberMe}
-                    // onValueChange={(IsrememberMe) => SetloginInfo({...loginInfo,IsrememberMe:IsrememberMe})}
+                    value={rememberUser}
+                     onValueChange={handleRememberUser}
                      />
                 </View>
                 <TouchableOpacity 
@@ -125,7 +187,8 @@ export default function LoginScreen({navigation}){
 
 
             </ImageBackground>
-  
+            {/* Props  */}
+            {/* {f && < Banner deviceNumber={deviceNumber} userName={userName}/>} */}
         </View>
     )
     
@@ -137,4 +200,4 @@ const styles = StyleSheet.create({
       height: 57,
     },
     
-  });
+  })
