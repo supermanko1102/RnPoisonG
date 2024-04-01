@@ -114,7 +114,7 @@ export default function ReportItem({ item }) {
     return (
         <View className='flex-row self-center'>
             <View className='self-center'>
-                <Text className='text-green-500'>{item.name}</Text>
+                <Text className='text-green-500'>{item.listno}</Text>
                 {showStartTime && <Text className='text-red-500'>{'開始時間' + item.starttime}</Text>}
                 {showEndTime && <Text className='text-red-500'>{'結束時間' + item.endtime}</Text>}
             </View>

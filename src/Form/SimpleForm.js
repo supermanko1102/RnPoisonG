@@ -2,22 +2,10 @@ import { ScrollView, Text, View } from "react-native";
 import Banner from "../Component/Banner";
 import Footer from "../Component/Footer";
 
-export default function SimpleForm(){
-    const FormData=
-    {
-        listno: "01F0506289061011130165",
-        MoveDate: "2024/03/28",
-        GoodsName: "環氧乙烷",
-        MoveWt: 25.000000,
-        WtUnit: "公斤",
-        Toxic_Type: "氣體",
-        StartPTName: "賀本企業有限公司",
-        StartPTAddr: "新北市新店區寶高路一七之二號",
-        GMName: "賀本企業有限公司",
-        Plate_no: "AKX-9353",
-        EndPtName: "廣鎬企業有限公司宜蘭二廠",
-        EndPtAddr: "宜蘭縣五結鄉成興村利工一路二段一二六巷三號"
-    }
+export default function SimpleForm({route}){
+    const FormData = route.params.selectedItem;
+        //  console.log('我拿到Data了a',FormData)
+
     return(
         <View className='flex-1'>
             <Banner/>

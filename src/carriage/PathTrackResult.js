@@ -1,9 +1,47 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
 import { View } from "react-native"
-import { Text } from "react-native-paper"
+import { ActivityIndicator, MD2Colors, Text } from "react-native-paper"
 import Banner from "../Component/Banner"
 import Footer from "../Component/Footer"
 import MyMapScreen from "../Component/MyMapScreen"
-export default function PathTrackResult(){
+export default function PathTrackResult({route}){
+    const {listno}  = route.params
+    console.log('表單編號',)
+    const[trackResult,setTrackResult]=useState('')
+    const [data, setData] = useState([]);
+    //設定一個loading狀態
+    const[loading,setLoading] = useState(true)   
+    //begin::Get API
+    useEffect(()=>{
+        const fetTrackResullt = async()=>{
+            const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
+                params: {
+                  Function: 'GetddlistByReturnAlreadyDetail',
+                  ServiceKey: 'V9achV7sd8AK',
+                  listno:listno
+                }
+
+              });
+              //拿到已申報表單詳細清單資訊
+              const resultPath = res.data.DTddlist[0]
+              setTrackResult(resultPath)
+            //   console.log('trackResult',trackResult)
+            //   console.log('trackResult',trackResult.listno)
+              setLoading(false)
+        }
+        fetTrackResullt()
+    },[])
+
+     //begin::loading
+    if(loading){
+        return (<View className='flex-1 justify-center items-center'>
+        <ActivityIndicator animating={true} size='large' color={MD2Colors.red800} />
+        </View>
+        )
+    }
+  //end::loading
+    //end::GET API
 
     return(
         <View className='flex-1'>
@@ -16,32 +54,32 @@ export default function PathTrackResult(){
 
         <View className='flex-row self-start mt-4 ml-10'>
             <Text variant="titleLarge">
-                表單號碼: A00000000000
+                表單號碼: {trackResult.listno}
             </Text>
         </View>
         <View className='flex-row self-start mt-4 ml-10'>
             <Text variant="titleLarge">
-                運送車號: ABC-001
+                運送車號: {trackResult.Plate_no}
             </Text>
         </View>
         <View className='flex-row self-start mt-4 ml-10'>
             <Text variant="titleLarge">
-                起運申報座標: 25.0257,121.508
+                起運申報座標: {trackResult.FromLat},{trackResult.FromLon}
             </Text>
         </View>
         <View className='flex-row self-start mt-4 ml-10'>
             <Text variant="titleLarge">
-                起運申報時間: 2024/01/01 14:04:02
+                起運申報時間: {trackResult.FromTime}
             </Text>
         </View>
         <View className='flex-row self-start mt-4 ml-10'>
             <Text variant="titleLarge">
-                迄運申報座標: 25.0257,121.508
+                迄運申報座標: {trackResult.ToLat},{trackResult.ToLon}
             </Text>
         </View>
         <View className='flex-row self-start mt-4 ml-10'>
             <Text variant="titleLarge">
-                迄運申報時間: 2024/01/01 14:04:02
+                迄運申報時間: {trackResult.ToTime}
             </Text>
         </View>
 
