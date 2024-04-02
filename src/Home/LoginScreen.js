@@ -9,9 +9,9 @@ export default function LoginScreen({navigation}){
     // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
     const dispatch =useDispatch()
 
-    const [account, setAccount] = useState('');
-    const [deviceNumber,setDeviceNumberLocal] = useState('')
-    const [password, setPassword] = useState('');
+    const [account, setAccount] = useState('G0000001');
+    const [deviceNumber,setDeviceNumberLocal] = useState('ABC-001')
+    const [password, setPassword] = useState('cindy701');
     const [rememberUser,setRememberUser]= useState(false)
     const [userName,SetUserNameLocal]= useState('')
 

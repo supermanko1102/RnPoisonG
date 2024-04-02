@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as Location from 'expo-location';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -6,7 +7,6 @@ import Banner from "../Component/Banner";
 import Footer from "../Component/Footer";
 import MyMapScreen from "../Component/MyMapScreen";
 import ReportItem from './ReportItem';
-
 export default function StartReport({navigation}) {
     
 
@@ -26,20 +26,42 @@ export default function StartReport({navigation}) {
         });
             // console.log('Data是',GetSimpleList.data.DTddlist[0].listno)
             const SimpleData= GetSimpleList.data.DTddlist
-            console.log('GetSimpleList',SimpleData)
+            // console.log('GetSimpleList',SimpleData)
             setData(SimpleData)
         }
         fetchSimpleList()
     },[]);
     
     //end:: Get DataSimpleApi
+    //begin::拿到當前經緯度
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null)
+    useEffect(() => {
+        (async () => {
+          
+          let { status } = await Location.requestForegroundPermissionsAsync();
+          if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+          }
+    
+          let location = await Location.getCurrentPositionAsync({});
+          setLocation(location);
+        })();
+      }, []);
+      let text = 'Waiting..';
+     
+      if (errorMsg) {
+        text = errorMsg;
+      } else if (location) {
+        text = JSON.stringify(location);
+        console.log('rullllll',location.coords.latitude)
+      }
+      console.log('拿到當前經緯度',text)    
 
-    const Data = [
-        {id:1,listno:'A0000000000000001',starttime:'2024/01/01 14:02:02',endtime:'2024/02/03 14:02:02',SerNo:'7'},
-        {id:2,listno:'A0000000000000002',starttime:'2024/01/01 14:02:02',endtime:'2024/02/03 14:02:02',SerNo:'8'},
-        {id:3,listno:'A0000000000000003',starttime:'2024/01/01 14:02:02',endtime:'2024/02/03 14:02:02',SerNo:'9'},
-        {id:4,listno:'A0000000000000004',starttime:'2024/01/01 14:02:02',endtime:'2024/02/03 14:02:02',SerNo:'10'},
-    ];
+    //end::拿到當前經緯度
+
+    
 
     const renderItem = ({ item }) => <ReportItem item={item} />; // 把每一個datalist 做component
 
@@ -49,6 +71,7 @@ export default function StartReport({navigation}) {
             <View className="grow">
                 <Text variant="headlineMedium" className="self-center mt-4">
                     請選擇要申報的簡易報表
+                    {/* 當前經緯度{location.coords.latitude},{location.coords.longitude} */}
                 </Text>
                 <View>
                     <FlatList

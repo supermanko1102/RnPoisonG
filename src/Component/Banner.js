@@ -12,7 +12,7 @@ export default function Banner(){
     const deviceNumber = useSelector(state => state.login.deviceNumber);
     const userName = useSelector(state => state.login.userName);
 
-    console.log('userName',userName)
+    // console.log('userName',userName)
 
     const handleLogout = ()=>{
         // console.log('BannerNavigation',navigation)

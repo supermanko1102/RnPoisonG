@@ -2,7 +2,7 @@ import { Button, CheckBox, Dialog } from "@rneui/themed";
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 export default function ReportItem({ item }) {
-    console.log('從開始申報拿到的item是:',item)
+    // console.log('從開始申報拿到的item是:',item)
     //begin::dialog
     const [visibleStart, setVisibleStart] = useState(false);
     const [visibleEnd, setVisibleEnd] = useState(false);
