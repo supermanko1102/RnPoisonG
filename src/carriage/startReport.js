@@ -26,7 +26,7 @@ export default function StartReport({navigation}) {
         });
             // console.log('Data是',GetSimpleList.data.DTddlist[0].listno)
             const SimpleData= GetSimpleList.data.DTddlist
-            // console.log('GetSimpleList',SimpleData)
+            console.log('GetSimpleList',SimpleData)
             setData(SimpleData)
         }
         fetchSimpleList()

@@ -2,6 +2,7 @@ import { Button, CheckBox, Dialog } from "@rneui/themed";
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 export default function ReportItem({ item }) {
+    console.log('從開始申報拿到的item是:',item)
     //begin::dialog
     const [visibleStart, setVisibleStart] = useState(false);
     const [visibleEnd, setVisibleEnd] = useState(false);
@@ -157,14 +158,14 @@ export default function ReportItem({ item }) {
                 
             </View>
             <Dialog isVisible={visibleStart}>
-                <Dialog.Title title={item.name + "是否同意要開始申報"}/>
+                <Dialog.Title title={item.listno + "是否同意要開始申報"}/>
                 <Dialog.Actions>
                     <Dialog.Button title="不同意" onPress={toggleDialogStart}/>
                     <Dialog.Button title="同意" onPress={handleAgreeStart}/>
                 </Dialog.Actions>
             </Dialog>
             <Dialog isVisible={visibleEnd}>
-                <Dialog.Title title={item.name + "是否同意要結束申報"}/>
+                <Dialog.Title title={item.listno + "是否同意要結束申報"}/>
                 <Dialog.Actions>
                     <Dialog.Button title="不同意" onPress={toggleDialogEnd}/>
                     <Dialog.Button title="同意" onPress={handleAgreeEnd}/>
@@ -172,7 +173,7 @@ export default function ReportItem({ item }) {
             </Dialog>
             
             <Dialog isVisible={visibleStartCancel}>
-                <Dialog.Title title={item.name + "是否同意要取消起點申報"}/>
+                <Dialog.Title title={item.listno + "是否同意要取消起點申報"}/>
                 <Dialog.Actions>
                     <Dialog.Button title="不同意" onPress={toggleDialogStartCancel}/>
                     <Dialog.Button title="同意" onPress={handleCancelStart}/>
@@ -180,7 +181,7 @@ export default function ReportItem({ item }) {
             </Dialog>
 
             <Dialog isVisible={visibleEndCancel}>
-                <Dialog.Title title={item.name + "是否同意要取消迄點申報"}/>
+                <Dialog.Title title={item.listno + "是否同意要取消迄點申報"}/>
                 <Dialog.Actions>
                     <Dialog.Button title="不同意" onPress={toggleDialogEndCancel}/>
                     <Dialog.Button title="同意" onPress={handleCancelEnd}/>
