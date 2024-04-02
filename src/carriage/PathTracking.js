@@ -18,13 +18,15 @@ export default function PathTracking({ navigation }) {
             try {
                 const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
                     params: {
-                        Function: 'GetddlistByReturnAlready',
+                        Function: 'Getddlist',
                         ServiceKey: 'V9achV7sd8AK',
                         Plate_no: deviceNumber
                     }
                 });
                 const reportList = res.data.DTddlist;
+                console.log('reportList',reportList)
                 setData(reportList);
+                
                 setLoading(false)
             } catch (error) {
                 console.error('Error fetching data:', error);

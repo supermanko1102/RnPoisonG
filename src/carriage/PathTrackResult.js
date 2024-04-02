@@ -6,6 +6,16 @@ import Banner from "../Component/Banner"
 import Footer from "../Component/Footer"
 import MyMapScreen from "../Component/MyMapScreen"
 export default function PathTrackResult({route}){
+    const NotYetGetAPI={
+        listno:'還沒拿到',
+        Plate_no:'還沒拿到',
+        FromLat:'還沒拿到',
+        FromLon:'還沒拿到',
+        FromTime:'還沒拿到',
+        ToLat:'還沒拿到',
+        ToLon:'還沒拿到',
+        ToTime:'還沒拿到',
+    }
     const {listno}  = route.params
     console.log('表單編號',)
     const[trackResult,setTrackResult]=useState('')
@@ -14,6 +24,7 @@ export default function PathTrackResult({route}){
     const[loading,setLoading] = useState(true)   
     //begin::Get API
     useEffect(()=>{
+        
         const fetTrackResullt = async()=>{
             const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
                 params: {
@@ -24,12 +35,19 @@ export default function PathTrackResult({route}){
 
               });
               //拿到已申報表單詳細清單資訊
-              const resultPath = res.data.DTddlist[0]
-              setTrackResult(resultPath)
+            //   const resultPath = res.data.DTddlist[0]
+            //   setTrackResult(resultPath)
             //   console.log('trackResult',trackResult)
             //   console.log('trackResult',trackResult.listno)
+            if(res.data && res.data.DTddlist && res.data.DTddlist.length > 0){
+                const resultPath = res.data.DTddlist[0];
+                setTrackResult(resultPath);
+            }else{
+                //API沒有拿到data
+                setTrackResult(NotYetGetAPI);
+            }
               setLoading(false)
-        }
+        } 
         fetTrackResullt()
     },[])
 
