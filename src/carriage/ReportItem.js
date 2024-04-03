@@ -1,14 +1,22 @@
 import { Button, CheckBox, Dialog } from "@rneui/themed";
+import axios from "axios";
 import React, { useState } from 'react';
-import { Text, View } from 'react-native';
-export default function ReportItem({ item }) {
-    // console.log('從開始申報拿到的item是:',item)
+import { Alert, Text, View } from 'react-native';
+import { useSelector } from "react-redux";
+export default function ReportItem({ item ,latitude,longitude}) {
+    //  console.log('從開始申報拿到的item是:',item)
+    //   console.log('從開始申報拿到的經緯度是:',latitude,longitude)
+     //get userName and DeviceNumber from Redux
+     const deviceNumber = useSelector(state => state.login.deviceNumber);
+     const userName = useSelector(state => state.login.userName);
+
+
+
     //begin::dialog
     const [visibleStart, setVisibleStart] = useState(false);
     const [visibleEnd, setVisibleEnd] = useState(false);
     const [visibleStartCancel,setVisibleStartCancel] = useState(false)
     const [visibleEndCancel,setVisibleEndCancel] = useState(false)
-
     //end::dialog
     //起點反灰
     const [startAble, setStartAble] = useState(false);
@@ -26,7 +34,58 @@ export default function ReportItem({ item }) {
     const [showStartTime,setShowStartTime]= useState(false)
     //結束時間顯示
     const [showEndTime,setShowEndtTime]= useState(false)
+    
+    const [intervalId, setIntervalId] = useState(null);
     //begin::控制視窗
+
+
+    //begin::申報起迄運API
+    const Add_ddlist_GPSByPhone = async (StartorEnd)=>{
+        const StartPoint = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx',{
+        params: {
+          Function: 'Add_ddlist_GPSByPhone',
+          ServiceKey: 'V9achV7sd8AK',
+          Fac_no:deviceNumber,
+          Plate_no:userName,
+          deviceNumber:'',
+          WGSLon:longitude,
+          WGSLat:latitude,
+          ListNo:item.listno,
+          DeclareType:StartorEnd
+        }
+        });
+         const IsProcessOK = StartPoint.data.IsProcessOK
+
+        //  setAlertShow(IsProcessOK)
+        //  console.log('我有成功呼叫到api嗎',IsProcessOK,'SetAlertShow',alertShow)
+        //要return出去 用useState會抓不到initial status 
+         return IsProcessOK;
+    }
+    //end::申報起迄運API
+
+    
+    //begin::抓軌跡API
+        const AddGPSByPhone = async ()=>{
+            const GetGPS = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx',{
+            params: {
+              Function: 'AddGPSByPhone',
+              ServiceKey: 'V9achV7sd8AK',
+              Fac_no:deviceNumber,
+              Plate_no:userName,
+              deviceNumber:'',
+              WGSLon:longitude,
+              WGSLat:latitude,
+              ListNo:item.listno,
+            }
+            });
+             const IsProcessOK = GetGPS.data.IsProcessOK
+            console.log('我是軌跡api現在經緯度',latitude,longitude)
+            //要return出去 用useState會抓不到initial status 
+             return IsProcessOK;
+        }
+    //end::抓軌跡API
+
+
 
     //控制開始彈出視窗
     const toggleDialogStart = () => {
@@ -44,10 +103,15 @@ export default function ReportItem({ item }) {
      const toggleDialogEndCancel = () => {
         setVisibleEndCancel(!visibleEndCancel);
     };
+    
 
     //end::控制視窗
     //begin:: logic function
-    const handleAgreeStart = () => {
+    const handleAgreeStart = async () => {
+
+        const AlertShow= await Add_ddlist_GPSByPhone('From')
+         
+        if(AlertShow){
         console.log('我要開始申報拉');
         //起點反灰
         setStartAble(true);
@@ -61,8 +125,23 @@ export default function ReportItem({ item }) {
         setShowStartButton(true)
         //顯示開始時間
         setShowStartTime(true)
+        
+        //呼叫軌跡API
+        // 设置定时器，每隔一段时间调用一次 AddGPSByPhone 函数
+        const intervalId = setInterval(async () => {
+            const result = await AddGPSByPhone(latitude, longitude);
+            console.log('AddGPSByPhone 结果', result);
+        }, 10000);
+        
+        // 将 intervalId 存储到组件状态中，以便在需要时清除定时器
+        setIntervalId(intervalId);
+        
+        }else{
+            Alert.alert('無法回傳至主機')
+        }
     };
     const handleAgreeEnd = ()=>{
+        Add_ddlist_GPSByPhone('To')
         console.log('我要結束申報拉');
         //dialog不見
         toggleDialogEnd(false);
@@ -78,6 +157,7 @@ export default function ReportItem({ item }) {
         setEndtAble(true)
     }
     const handleCancelStart = ()=>{
+        // clearInterval(intervalId)
         console.log('我要同意取消起點申報拉');
         //dialog 不見
         toggleDialogStartCancel(false)
@@ -188,7 +268,7 @@ export default function ReportItem({ item }) {
                 </Dialog.Actions>
             </Dialog>
             
-            
         </View>
+        
     );
 }
