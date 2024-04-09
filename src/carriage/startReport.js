@@ -12,7 +12,7 @@ import ReportItem from './ReportItem';
 export default function StartReport({navigation}) {
   
   //先拿到車輛資訊
-  const deviceNumber = useSelector(state => state.login.deviceNumber);
+  const carNumber = useSelector(state => state.login.deviceNumber);
   //設定目前拿到的經緯度
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -28,7 +28,7 @@ export default function StartReport({navigation}) {
         params: {
         Function: 'Getddlist',
         ServiceKey: 'V9achV7sd8AK',
-        Plate_no: deviceNumber
+        Plate_no: carNumber,
       }
     });
         // console.log('Data是',GetSimpleList.data.DTddlist[0].listno)

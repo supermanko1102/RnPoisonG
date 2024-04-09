@@ -1,13 +1,24 @@
 import { Button, CheckBox, Dialog } from "@rneui/themed";
 import axios from "axios";
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useSelector } from "react-redux";
+
 export default function ReportItem({ item ,latitude,longitude}) {
+
     //  console.log('從開始申報拿到的item是:',item)
     //   console.log('從開始申報拿到的經緯度是:',latitude,longitude)
+    //!!!!! begin::存經緯度
+    const savelatitudeRef = useRef(latitude);
+    const savelongitudeRef = useRef(longitude); 
+    useEffect(()=>{
+        savelatitudeRef.current = latitude;
+        savelongitudeRef.current = longitude;
+    },[latitude,longitude])
+    //!!!!! end::存經緯度
+
      //get userName and DeviceNumber from Redux
-     const deviceNumber = useSelector(state => state.login.deviceNumber);
+     const carNumer = useSelector(state => state.login.deviceNumber);
      const userName = useSelector(state => state.login.userName);
 
 
@@ -35,7 +46,7 @@ export default function ReportItem({ item ,latitude,longitude}) {
     //結束時間顯示
     const [showEndTime,setShowEndtTime]= useState(false)
     
-    const [intervalId, setIntervalId] = useState(null);
+    const [intervalId, setIntervalId] = useState(0);
     //begin::控制視窗
 
 
@@ -45,8 +56,8 @@ export default function ReportItem({ item ,latitude,longitude}) {
         params: {
           Function: 'Add_ddlist_GPSByPhone',
           ServiceKey: 'V9achV7sd8AK',
-          Fac_no:deviceNumber,
-          Plate_no:userName,
+          Fac_no:userName,
+          Plate_no:carNumer,
           deviceNumber:'',
           WGSLon:longitude,
           WGSLat:latitude,
@@ -66,25 +77,52 @@ export default function ReportItem({ item ,latitude,longitude}) {
     
     //begin::抓軌跡API
         const AddGPSByPhone = async ()=>{
-            const GetGPS = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx',{
+            await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx',{
             params: {
               Function: 'AddGPSByPhone',
               ServiceKey: 'V9achV7sd8AK',
-              Fac_no:deviceNumber,
-              Plate_no:userName,
-              deviceNumber:'',
-              WGSLon:longitude,
-              WGSLat:latitude,
+              Fac_no:userName,
+              Plate_no:carNumer,
+              deviceNumber:'AAAAAAAA-4444-5555-AAAA-333333333333',
+              deviceType:'IOS',
+              WGSLon:savelongitudeRef.current,
+              WGSLat:savelatitudeRef.current,
               ListNo:item.listno,
             }
             });
-             const IsProcessOK = GetGPS.data.IsProcessOK
-            console.log('我是軌跡api現在經緯度',latitude,longitude)
-            //要return出去 用useState會抓不到initial status 
-             return IsProcessOK;
+             console.log('我是軌跡api現在經緯度',savelatitudeRef.current,savelongitudeRef.current)
+            
         }
     //end::抓軌跡API
+    //begin::::
+        useEffect(()=>{
+            const fetchGetddlistByReturnFrom = async()=>{
+                const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
+                params: {
+                Function: 'GetddlistByReturn',
+                ServiceKey: 'V9achV7sd8AK',
+                Plate_no: carNumer,
+                declareType:'From'
+              }
+            });
+            console.log('fetchGetddlistByReturnFrom',res.data.DTddlist)
+            }
+            const fetchGetddlistByReturnTo = async()=>{
+                const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
+                params: {
+                Function: 'GetddlistByReturn',
+                ServiceKey: 'V9achV7sd8AK',
+                Plate_no: carNumer,
+                declareType:'To'
+              }
+            });
+            // console.log('fetchGetddlistByReturnTo',res.data)
 
+            }
+            fetchGetddlistByReturnFrom()
+            fetchGetddlistByReturnTo()
+        },[])
+    //end::::
 
 
     //控制開始彈出視窗
@@ -108,7 +146,7 @@ export default function ReportItem({ item ,latitude,longitude}) {
     //end::控制視窗
     //begin:: logic function
     const handleAgreeStart = async () => {
-
+        
         const AlertShow= await Add_ddlist_GPSByPhone('From')
          
         if(AlertShow){
@@ -125,22 +163,26 @@ export default function ReportItem({ item ,latitude,longitude}) {
         setShowStartButton(true)
         //顯示開始時間
         setShowStartTime(true)
+        //定時呼叫
+ 
+        const intervalId = setInterval(()=>{
+            
+             AddGPSByPhone()
+            // console.log('我要開始申報時的intervalId',intervalId)
+            // console.log('在setinterval下經位度',savelatitudeRef,savelongitudeRef)
+
+        },4000)
+        setIntervalId(intervalId)
+
         
-        //呼叫軌跡API
-        // 设置定时器，每隔一段时间调用一次 AddGPSByPhone 函数
-        const intervalId = setInterval(async () => {
-            const result = await AddGPSByPhone(latitude, longitude);
-            console.log('AddGPSByPhone 结果', result);
-        }, 10000);
-        
-        // 将 intervalId 存储到组件状态中，以便在需要时清除定时器
-        setIntervalId(intervalId);
-        
+
         }else{
             Alert.alert('無法回傳至主機')
         }
     };
     const handleAgreeEnd = ()=>{
+         clearInterval(intervalId)
+        // console.log('我要結束申報拉intervalId',intervalId)
         Add_ddlist_GPSByPhone('To')
         console.log('我要結束申報拉');
         //dialog不見
@@ -157,7 +199,9 @@ export default function ReportItem({ item ,latitude,longitude}) {
         setEndtAble(true)
     }
     const handleCancelStart = ()=>{
-        // clearInterval(intervalId)
+        clearInterval(intervalId)
+        console.log('我要同意取消intervalId',intervalId)
+
         console.log('我要同意取消起點申報拉');
         //dialog 不見
         toggleDialogStartCancel(false)
@@ -175,6 +219,12 @@ export default function ReportItem({ item ,latitude,longitude}) {
 
     const handleCancelEnd = ()=>{
         console.log('我要取消迄點申報拉');
+        //取消後 又要開始抓軌跡API
+        const intervalId = setInterval(()=>{
+            AddGPSByPhone()
+            console.log('在取消後setinterval下經位度',savelatitudeRef,savelongitudeRef)
+       },4000)
+       setIntervalId(intervalId)
         //dialog 不見
         toggleDialogEndCancel(false)
         //迄點不反灰
