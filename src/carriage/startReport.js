@@ -17,29 +17,55 @@ export default function StartReport({navigation}) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   //放置api的data
-  const [data, setData] = useState([]);
+  const [dataFrom, setDataFrom] = useState([]);
+  const [dataTo, setDataTo] = useState([]);
   //設定一個loading狀態
   const[loading,setLoading] = useState(true)  
-  //begin:: Get DataSimpleApi
+  //begin::取得今日申報清單起迄運狀態
   useEffect(()=>{
-    const fetchSimpleList = async ()=>{
-        //取得今日簡易表API
-        const GetSimpleList = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
-        params: {
-        Function: 'Getddlist',
-        ServiceKey: 'V9achV7sd8AK',
-        Plate_no: carNumber,
-      }
-    });
-        // console.log('Data是',GetSimpleList.data.DTddlist[0].listno)
-        const SimpleData= GetSimpleList.data.DTddlist
-        // console.log('GetSimpleList',SimpleData)
-        setData(SimpleData)
+    const fetchGetddlistByReturnFrom = async()=>{
+      const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
+      params: {
+      Function: 'GetddlistByReturn',
+      ServiceKey: 'V9achV7sd8AK',
+      Plate_no: carNumber,
+      declareType:'From'
     }
-    
-    fetchSimpleList()
-  },[]);
+  });
+  const modifyList = res.data.DTddlist.map(item =>{
+    return {
+      ...item,
+      ReturnTimeFrom: item.ReturnTime // 將ReturnTime改成ReturnTimeTo
+  }
+  })
+  setDataFrom(modifyList)
+    console.log('fetchGetddlistByReturnFrom',modifyList)
+  }
+  
+  const fetchGetddlistByReturnTo = async()=>{
+      const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
+      params: {
+      Function: 'GetddlistByReturn',
+      ServiceKey: 'V9achV7sd8AK',
+      Plate_no: carNumber,
+      declareType:'To'
+    }
+  });
+  const modifyList = res.data.DTddlist.map(item =>{
+    return {
+      ...item,
+      ReturnTimeTo: item.ReturnTime // 將ReturnTime改成ReturnTimeTo
+  }
+  })
+  setDataTo(modifyList)
+    console.log('fetchGetddlistByReturnTo',modifyList)
 
+  }
+
+    fetchGetddlistByReturnFrom()
+    fetchGetddlistByReturnTo()
+  },[]);
+  //end::
   //being::拿經緯度
   useEffect(()=>{
     (async()=>{
@@ -64,9 +90,22 @@ if(loading){
   )
 }
 //end::loading
-  
 
-    const renderItem = ({ item }) => <ReportItem item={item} latitude={location.coords.latitude} longitude={location.coords.longitude} />; // 把每一個datalist 做component
+  //begin::merge from &&to datalist
+  const allListnos = new Set([...dataTo.map(item => item.listno), ...dataFrom.map(item => item.listno)]);
+
+  const mergedList = Array.from(allListnos).map(listno => {
+  const itemTo = dataTo.find(item => item.listno === listno);
+  const itemFrom = dataFrom.find(item => item.listno === listno);
+  return {
+      listno,
+      ReturnTimeFrom: (itemFrom && itemFrom.ReturnTimeFrom) || '',
+      ReturnTimeTo: (itemTo && itemTo.ReturnTimeTo) || ''
+  };
+});
+  //  console.log('mergedList',mergedList)
+  //end::merge from && to datalist
+  const renderItem = ({ item }) => <ReportItem item={item} latitude={location.coords.latitude} longitude={location.coords.longitude} />; // 把每一個datalist 做component
 
     return (        
         <View className="flex-1">
@@ -79,7 +118,7 @@ if(loading){
                 </Text>
                 <View>
                     <FlatList
-                        data={data}
+                        data={mergedList}
                         renderItem={renderItem}
                         keyExtractor={item => item.listno}
                     />

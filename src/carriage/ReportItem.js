@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 
 export default function ReportItem({ item ,latitude,longitude}) {
 
-    //  console.log('從開始申報拿到的item是:',item)
+    //console.log('從開始申報拿到的item是:',item)
+    // console.log('從開始申報拿到的returnTimes是:',returnTimes)
     //   console.log('從開始申報拿到的經緯度是:',latitude,longitude)
     //!!!!! begin::存經緯度
     const savelatitudeRef = useRef(latitude);
@@ -18,10 +19,8 @@ export default function ReportItem({ item ,latitude,longitude}) {
     //!!!!! end::存經緯度
 
      //get userName and DeviceNumber from Redux
-     const carNumer = useSelector(state => state.login.deviceNumber);
+     const carNumber = useSelector(state => state.login.deviceNumber);
      const userName = useSelector(state => state.login.userName);
-
-
 
     //begin::dialog
     const [visibleStart, setVisibleStart] = useState(false);
@@ -29,26 +28,71 @@ export default function ReportItem({ item ,latitude,longitude}) {
     const [visibleStartCancel,setVisibleStartCancel] = useState(false)
     const [visibleEndCancel,setVisibleEndCancel] = useState(false)
     //end::dialog
-    //起點反灰
-    const [startAble, setStartAble] = useState(false);
-    //迄點反灰
-    const [endAble, setEndtAble] = useState(true);
-    //設定是否startchecked
-    const [startchecked, setStartChecked] = useState(false);
-    //設定是否endchecked
-    const [endchecked, setEndChecked] = useState(false);
+
+    //起點 
+    const [startChecked, setStartChecked] = useState(false);
+    const [startDisabled, setStartDisabled] = useState(false);
+    //迄點
+    const [endChecked, setEndChecked] = useState(false);
+    const [endDisabled, setEndDisabled] = useState(false);
+
     //取消起點按鈕顯示
     const [showStartButton,setShowStartButton] = useState(false)
     //取消迄點按鈕顯示
     const [showEndButton,setShowEndButton] = useState(false)
-    //開始時間顯示
-    const [showStartTime,setShowStartTime]= useState(false)
-    //結束時間顯示
-    const [showEndTime,setShowEndtTime]= useState(false)
-    
-    const [intervalId, setIntervalId] = useState(0);
-    //begin::控制視窗
+    //當前時間
+    const [currentTimeFrom,setCurrentTimeFrom]=useState(item.ReturnTimeFrom)
+    const [currentTimeTo,setCurrentTimeTo]=useState(item.ReturnTimeTo)
+    const formatTime = (date) => {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+    };
 
+    //給interValid
+    const [intervalId, setIntervalId] = useState(0);
+
+    //begin::initial checkbox and disable button
+    useEffect(() => {
+    switch (true) {
+        case currentTimeFrom === "" && currentTimeTo === "":
+            // 現在是都還沒開始運送
+            console.log('現在是都還沒開始運送')
+            setStartChecked(false)
+            setStartDisabled(false)
+            setEndChecked(false)
+            setEndDisabled(true)
+            setShowStartButton(false)
+            setShowEndButton(false)
+
+            break;
+        case currentTimeFrom !== "" && currentTimeTo === "":
+            // 現在是都開始運送中
+            console.log('現在是都開始運送中')
+            setStartChecked(true)
+            setStartDisabled(true)
+            setEndChecked(false)
+            setEndDisabled(false)
+            setShowStartButton(true)
+            setShowEndButton(false)
+            break;
+        case currentTimeFrom !== "" && currentTimeTo !== "":
+            // 現在是結束運送
+            console.log('現在是結束運送')
+            setStartChecked(true)
+            setStartDisabled(true)
+            setEndChecked(true)
+            setEndDisabled(true)
+            setShowStartButton(false)
+            setShowEndButton(true)
+            break;
+        default:
+    }},[])
+    //eng::
 
     //begin::申報起迄運API
     const Add_ddlist_GPSByPhone = async (StartorEnd)=>{
@@ -57,7 +101,7 @@ export default function ReportItem({ item ,latitude,longitude}) {
           Function: 'Add_ddlist_GPSByPhone',
           ServiceKey: 'V9achV7sd8AK',
           Fac_no:userName,
-          Plate_no:carNumer,
+          Plate_no:carNumber,
           deviceNumber:'',
           WGSLon:longitude,
           WGSLat:latitude,
@@ -73,6 +117,7 @@ export default function ReportItem({ item ,latitude,longitude}) {
          return IsProcessOK;
     }
     //end::申報起迄運API
+    
 
     
     //begin::抓軌跡API
@@ -82,7 +127,7 @@ export default function ReportItem({ item ,latitude,longitude}) {
               Function: 'AddGPSByPhone',
               ServiceKey: 'V9achV7sd8AK',
               Fac_no:userName,
-              Plate_no:carNumer,
+              Plate_no:carNumber,
               deviceNumber:'AAAAAAAA-4444-5555-AAAA-333333333333',
               deviceType:'IOS',
               WGSLon:savelongitudeRef.current,
@@ -90,41 +135,34 @@ export default function ReportItem({ item ,latitude,longitude}) {
               ListNo:item.listno,
             }
             });
-             console.log('我是軌跡api現在經緯度',savelatitudeRef.current,savelongitudeRef.current)
+            //  console.log('我是軌跡api現在經緯度',savelatitudeRef.current,savelongitudeRef.current)
             
         }
     //end::抓軌跡API
-    //begin::::
-        useEffect(()=>{
-            const fetchGetddlistByReturnFrom = async()=>{
-                const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
-                params: {
-                Function: 'GetddlistByReturn',
-                ServiceKey: 'V9achV7sd8AK',
-                Plate_no: carNumer,
-                declareType:'From'
-              }
-            });
-            console.log('fetchGetddlistByReturnFrom',res.data.DTddlist)
-            }
-            const fetchGetddlistByReturnTo = async()=>{
-                const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
-                params: {
-                Function: 'GetddlistByReturn',
-                ServiceKey: 'V9achV7sd8AK',
-                Plate_no: carNumer,
-                declareType:'To'
-              }
-            });
-            // console.log('fetchGetddlistByReturnTo',res.data)
+    
+    //begin::刪除起迄運API
+    const Del_ddlist_GPSByPhone = async (StartorEnd)=>{
+        const StartPoint = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx',{
+        params: {
+          Function: 'Del_ddlist_GPSByPhone',
+          ServiceKey: 'V9achV7sd8AK',
+          Fac_no:userName,
+          deviceNumber:'',
+          ListNo:item.listno,
+          DeclareType:StartorEnd
+        }
+        });
+         const IsProcessOK = StartPoint.data.IsProcessOK
 
-            }
-            fetchGetddlistByReturnFrom()
-            fetchGetddlistByReturnTo()
-        },[])
-    //end::::
+        //  setAlertShow(IsProcessOK)
+        //  console.log('我有成功呼叫到api嗎',IsProcessOK,'SetAlertShow',alertShow)
+        //要return出去 用useState會抓不到initial status 
+         return IsProcessOK;
+    }
 
 
+
+    //end::刪除起迄運API
     //控制開始彈出視窗
     const toggleDialogStart = () => {
         setVisibleStart(!visibleStart);
@@ -141,7 +179,6 @@ export default function ReportItem({ item ,latitude,longitude}) {
      const toggleDialogEndCancel = () => {
         setVisibleEndCancel(!visibleEndCancel);
     };
-    
 
     //end::控制視窗
     //begin:: logic function
@@ -151,118 +188,115 @@ export default function ReportItem({ item ,latitude,longitude}) {
          
         if(AlertShow){
         console.log('我要開始申報拉');
-        //起點反灰
-        setStartAble(true);
-        //迄點不反灰
-        setEndtAble(false)
-        //dialog不見
+        // 起點反灰
+        setStartChecked(true);
+        setStartDisabled(true)
+        setEndDisabled(false)
+        // dialog不見
         toggleDialogStart(false);
-        //顯示勾勾
-        setStartChecked(true)
         //顯示起點按鈕
         setShowStartButton(true)
-        //顯示開始時間
-        setShowStartTime(true)
-        //定時呼叫
- 
+
+        // //begin:: get current date tiem
+        let UpdataTime = (new Date())
+        setCurrentTimeFrom(formatTime(UpdataTime))
+        // //end:: get current date tiem
+
+
+        // 定時呼叫
         const intervalId = setInterval(()=>{
-            
              AddGPSByPhone()
             // console.log('我要開始申報時的intervalId',intervalId)
             // console.log('在setinterval下經位度',savelatitudeRef,savelongitudeRef)
-
         },4000)
         setIntervalId(intervalId)
-
-        
-
         }else{
             Alert.alert('無法回傳至主機')
         }
     };
-    const handleAgreeEnd = ()=>{
-         clearInterval(intervalId)
-        // console.log('我要結束申報拉intervalId',intervalId)
-        Add_ddlist_GPSByPhone('To')
-        console.log('我要結束申報拉');
-        //dialog不見
+    const handleAgreeEnd = async()=>{
+        const AlertShow= await Add_ddlist_GPSByPhone('To')
+         
+        if(AlertShow){
+        console.log('我要開始迄點申報拉');
+        // 起點反灰
+        setEndChecked(true);
+        setEndDisabled(true)
+        // dialog不見
         toggleDialogEnd(false);
-        //顯示勾勾
-        setEndChecked(true)
-        //隱藏起點按鈕
-        setShowStartButton(false)
         //顯示迄點按鈕
         setShowEndButton(true)
-        //顯示結束時間
-        setShowEndtTime(true)
-        //迄點反灰
-        setEndtAble(true)
+        //隱藏起點按鈕
+        setShowStartButton(false)
+        //更新時間
+        let UpdataTime = (new Date())
+        setCurrentTimeTo(formatTime(UpdataTime))
+        // 定時呼叫
+        const intervalId = setInterval(()=>{
+             AddGPSByPhone()
+        },4000)
+        setIntervalId(intervalId)
+        }else{
+            Alert.alert('無法回傳至主機')
+        }
     }
     const handleCancelStart = ()=>{
         clearInterval(intervalId)
-        console.log('我要同意取消intervalId',intervalId)
+        // console.log('我要同意取消intervalId',intervalId)
 
         console.log('我要同意取消起點申報拉');
+        Del_ddlist_GPSByPhone('From')
         //dialog 不見
         toggleDialogStartCancel(false)
-        //起點反灰 disable要設成false
-        setStartAble(false)
         //不顯示起點勾勾
         setStartChecked(false)
-        //起點時間隱藏
-        setShowStartTime(false)
-        //迄點反灰
-        setEndtAble(true)
-
-
+        setStartDisabled(false)
+        setEndDisabled(true)
+        // 隱藏取消起點申報
+        setShowStartButton(false)
     }
 
     const handleCancelEnd = ()=>{
         console.log('我要取消迄點申報拉');
+        Del_ddlist_GPSByPhone('To')
         //取消後 又要開始抓軌跡API
         const intervalId = setInterval(()=>{
             AddGPSByPhone()
-            console.log('在取消後setinterval下經位度',savelatitudeRef,savelongitudeRef)
-       },4000)
-       setIntervalId(intervalId)
+            // console.log('在取消後setinterval下經位度',savelatitudeRef,savelongitudeRef)
+        },4000)
+        setIntervalId(intervalId)
         //dialog 不見
         toggleDialogEndCancel(false)
-        //迄點不反灰
-        setEndtAble(false)
-        //迄點不顯示勾勾
+        //不顯示迄點勾勾
         setEndChecked(false)
+        setEndDisabled(false)
         //把起點的按鈕顯示出來 迄點的按鈕隱藏
         setShowStartButton(true)
         setShowEndButton(false)
-        //迄點時間隱藏
-        setShowEndtTime(false)
     }
-
-
     //end:: logic function
-
-
     return (
         <View className='flex-row self-center'>
             <View className='self-center'>
                 <Text className='text-green-500'>{item.listno}</Text>
-                {showStartTime && <Text className='text-red-500'>{'開始時間' + item.starttime}</Text>}
-                {showEndTime && <Text className='text-red-500'>{'結束時間' + item.endtime}</Text>}
+                { startChecked && <Text className='text-red-500'>{'開始時間' + currentTimeFrom}</Text>}
+               
+                {endChecked && <Text className='text-red-500'>{'結束時間' + currentTimeTo}</Text>}
             </View>
 
             <View>
             <CheckBox 
 
-            checked={startchecked}
-            disabled={startAble}
+            checked={startChecked}
+            disabled={startDisabled}
             onPress={() => {
                 toggleDialogStart()
             }} 
             title="起點"
            />
             <CheckBox 
-            checked={endchecked} 
-            disabled={endAble}
+            checked={endChecked} 
+            disabled={endDisabled}
             onPress={() => {
             toggleDialogEnd()
            }} 
@@ -270,21 +304,14 @@ export default function ReportItem({ item ,latitude,longitude}) {
             </View>
 
             <View className=''>
-                <Button 
-                style={{display: showStartButton ?'flex':'none'}}
-                onPress={toggleDialogStartCancel}
-                >
-                
+                {showStartButton && (<Button onPress={toggleDialogStartCancel}>
                     <Text>取消起點申報</Text>
-                </Button>
-                <Button 
-                style={{display: showEndButton ?'flex':'none'}}
-                onPress={toggleDialogEndCancel}
-                >
+                </Button>)}
+                {showEndButton &&(<Button onPress={toggleDialogEndCancel}>
                     <Text>取消迄點申報</Text>
-                </Button>
-                {/* <Button mode='contained-tonal' onPress={toggleDialogStart} disabled={!able}><Text>起點</Text></Button>
-                <Button mode='contained-tonal' onPress={toggleDialogEnd} disabled={able}><Text>迄點</Text></Button> */}
+                </Button>)}
+                
+
                 
             </View>
             <Dialog isVisible={visibleStart}>
