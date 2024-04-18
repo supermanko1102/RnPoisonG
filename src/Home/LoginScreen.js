@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { setDeviceNumber, setUserName } from '../store/modules/loginSlice';
+import { setAccount, setDeviceNumber, setUserName } from '../store/modules/loginSlice';
 
 import { Alert, Image, ImageBackground, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ export default function LoginScreen({navigation}){
     // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
     const dispatch =useDispatch()
 
-    const [account, setAccount] = useState('G0000001');
+    const [account, setAccountLocal] = useState('G0000001');
     const [deviceNumber,setDeviceNumberLocal] = useState('ABC-001')
     const [password, setPassword] = useState('cindy701');
     const [rememberUser,setRememberUser]= useState(false)
@@ -41,6 +41,7 @@ export default function LoginScreen({navigation}){
                 SetUserNameLocal(response.data.LoginName)
                 console.log('userName',userName)
                 dispatch(setUserName(userName));
+                dispatch(setAccount(account))
               }else{
                 Alert.alert('登入失敗',response.data.Message)
               }
@@ -105,7 +106,7 @@ export default function LoginScreen({navigation}){
                     ></Image>
                     <TextInput
                         value={account}
-                        onChangeText={(text) => setAccount(text)}
+                        onChangeText={(text) => setAccountLocal(text)}
                         placeholder={'帳號'}
 
                         className="flex-initial w-64 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] ml-4"

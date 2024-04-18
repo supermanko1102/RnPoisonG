@@ -8,8 +8,9 @@ const loginSlice  = createSlice({
     isLogin: false,
     token: null,
     error: null,
-    deviceNumber:'',
-    userName:''
+    account: '',
+    deviceNumber: '',
+    userName: ''
     },
     //同步方法
     reducers:{
@@ -33,11 +34,14 @@ const loginSlice  = createSlice({
         },
         setUserName(state, action) {
             state.userName = action.payload;
-        }
+        },
+        setAccount(state, action) {
+            state.account = action.payload;
+        },
     }
 })
 //解構出創建action對象的函數  {action creater}
-const {loginSuccess, loginFailure,logout,setDeviceNumber,setUserName} = loginSlice.actions
+const {loginSuccess, loginFailure,logout,setDeviceNumber,setUserName,setAccount} = loginSlice.actions
 
 
 // const fetchLoginList = () => {
@@ -60,5 +64,5 @@ const {loginSuccess, loginFailure,logout,setDeviceNumber,setUserName} = loginSli
 // get reducer 
 const userReducer = loginSlice.reducer
 //export action and reducer
-export { loginFailure, loginSuccess, logout, setDeviceNumber, setUserName };
+export { loginFailure, loginSuccess, logout, setAccount, setDeviceNumber, setUserName };
 export default userReducer
