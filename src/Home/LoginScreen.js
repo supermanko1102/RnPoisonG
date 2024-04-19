@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { setAccount, setDeviceNumber, setUserName } from '../store/modules/loginSlice';
 
 import { Alert, Image, ImageBackground, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -14,8 +14,30 @@ export default function LoginScreen({navigation}){
     const [password, setPassword] = useState('cindy701');
     const [rememberUser,setRememberUser]= useState(false)
     const [userName,SetUserNameLocal]= useState('')
+    const [captcha,SetCaptcha] = useState('')
 
+    //begin::驗證碼 
+    
+    const [randomCode, setRandomCode] = useState('');
 
+    useEffect(() => {
+        generateRandomCode();
+    }, []);
+
+    const generateRandomCode = () => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let code = '';
+        for (let i = 0; i < 4; i++) {
+            code += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        // console.log('Randomcode', code)
+        setRandomCode(code);
+    };
+    const regenerateCode = () => {
+        generateRandomCode();
+    };
+    
+    //end::驗證碼
     //begin::登入邏輯
     const handleLogin = async() => {
         // dispatch(setLoginStatus(true))
@@ -35,11 +57,15 @@ export default function LoginScreen({navigation}){
 
                 }
               })
-              console.log('username',response.data.IsProcessOK)
+            console.log('username',response.data.IsProcessOK)
+            if(captcha !==randomCode){
+                Alert.alert('驗證碼錯誤')
+                return
+              }
               if(response.data.IsProcessOK){
                 navigation.navigate("MainIndex");
                 SetUserNameLocal(response.data.LoginName)
-                console.log('userName',userName)
+                // console.log('userName',userName)
                 dispatch(setUserName(userName));
                 dispatch(setAccount(account))
               }else{
@@ -62,8 +88,9 @@ export default function LoginScreen({navigation}){
         setRememberUser(!rememberUser)
     }
     //end::記憶帳號
-    
-      
+
+
+
     return (
         <View className="flex-1">
             <ImageBackground
@@ -155,13 +182,16 @@ export default function LoginScreen({navigation}){
                     <View 
                     className="flex-row w-64  py-2 h-[46] ml-4 pr-0">
                     <TextInput
+                    value={captcha}
+                    onChangeText={(text) => SetCaptcha(text)}
                     placeholder={'驗證碼'}
                     className="flex-initial w-32 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] mr-5 "
                     />
-                    <TextInput
+                    <TouchableOpacity
                     className="flex-initial w-32 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] ml-4 "
-                    >我是驗證碼
-                    </TextInput>
+                    onPress={regenerateCode}
+                    ><Text>{randomCode}</Text>
+                    </TouchableOpacity>
                     </View>
                 </View>
                 <View className="flex flex-row justify-center">

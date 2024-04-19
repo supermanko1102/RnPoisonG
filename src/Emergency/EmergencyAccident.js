@@ -101,7 +101,7 @@ export default function EmergencyAccident(){
                   deviceType:'IOS',
                   WGSLon:location.coords.longitude,
                   WGSLat:location.coords.latitude,
-                  Note:`${noteCar,noteAccident,noteItem,noteToxic}`
+                  Note:`${noteCar}${noteAccident}${noteItem}${noteToxic}`
                 }
                 });
                 
