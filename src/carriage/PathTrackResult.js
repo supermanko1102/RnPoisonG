@@ -4,7 +4,7 @@ import { View } from "react-native"
 import { ActivityIndicator, MD2Colors, Text } from "react-native-paper"
 import Banner from "../Component/Banner"
 import Footer from "../Component/Footer"
-import MyMapScreen from "../Component/MyMapScreen"
+import FormTrackMap from "../Component/FormTrackMap"
 export default function PathTrackResult({route}){
     const NotYetGetAPI={
         listno:'還沒拿到',
@@ -106,7 +106,8 @@ export default function PathTrackResult({route}){
         <View 
                 className='w-11/12 self-center mt-2 mb-2'
                 style={{flex:1}}>
-                    <MyMapScreen/>
+                    {/* <MyMapScreen/> */}
+                    <FormTrackMap listno={trackResult.listno}/>
                 </View>
                 {/* End:MapView */}
         </View>

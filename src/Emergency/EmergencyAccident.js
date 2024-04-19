@@ -2,12 +2,12 @@ import { Dialog } from "@rneui/themed";
 import axios from "axios";
 import * as Location from 'expo-location';
 import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { ActivityIndicator, MD2Colors, Switch } from "react-native-paper";
+import { Switch, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useSelector } from "react-redux";
 import Banner from "../Component/Banner";
+import CurrentLocalMap from "../Component/CurrentLocalMap";
 import Footer from "../Component/Footer";
-import MyMapScreen from "../Component/MyMapScreen";
 
 export default function EmergencyAccident(){
     const [carSwitch,SetCarSwitch] = useState(false)
@@ -155,7 +155,8 @@ export default function EmergencyAccident(){
                 </TouchableOpacity>
 
                 <View className='w-11/12 self-center mt-2 mb-2' style={{flex:1}}>
-                    <MyMapScreen/>
+                    {/* <MyMapScreen/> */}
+                    <CurrentLocalMap location={location.coords}/>
                 </View>
 
                 <Dialog isVisible={visible}>

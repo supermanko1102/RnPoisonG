@@ -8,6 +8,7 @@ export default function VehicleScreen(){
         source={require('../../Img/施工中.png')}
         />
         <ActivityIndicator animating={true} size='large' color={MD2Colors.red800} />
+        {/* <CurrentLocalMap/> */}
     </View>
  )
 }

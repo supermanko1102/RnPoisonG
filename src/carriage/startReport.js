@@ -5,10 +5,9 @@ import { FlatList, Text, View } from 'react-native';
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useSelector } from 'react-redux';
 import Banner from "../Component/Banner";
+import CurrentLocalMap from '../Component/CurrentLocalMap';
 import Footer from "../Component/Footer";
-import MyMapScreen from "../Component/MyMapScreen";
 import ReportItem from './ReportItem';
-
 export default function StartReport({navigation}) {
   
   //先拿到車輛資訊
@@ -39,7 +38,7 @@ export default function StartReport({navigation}) {
   }
   })
   setDataFrom(modifyList)
-    console.log('fetchGetddlistByReturnFrom',modifyList)
+    // console.log('fetchGetddlistByReturnFrom',modifyList)
   }
   
   const fetchGetddlistByReturnTo = async()=>{
@@ -58,7 +57,7 @@ export default function StartReport({navigation}) {
   }
   })
   setDataTo(modifyList)
-    console.log('fetchGetddlistByReturnTo',modifyList)
+    // console.log('fetchGetddlistByReturnTo',modifyList)
 
   }
 
@@ -75,7 +74,7 @@ export default function StartReport({navigation}) {
         return;
       }      
       let location = await Location.getCurrentPositionAsync({});
-      // console.log('現在的經緯度',location)
+      //  console.log('現在的經緯度',location)
       setLocation(location);
       setLoading(false)
     })()
@@ -114,7 +113,7 @@ if(loading){
             <View className="grow">
                 <Text variant="headlineMedium" className="self-center mt-4">
                     請選擇要申報的簡易報表
-                    現在經位度{location.coords.latitude},{location.coords.longitude}
+                    {/* 現在經位度{location.coords.latitude},{location.coords.longitude} */}
                 </Text>
                 <View>
                     <FlatList
@@ -124,8 +123,10 @@ if(loading){
                     />
                 </View>
                 <View className='w-11/12 self-center mt-2 mb-2' style={{flex:1}}>
-                    <MyMapScreen/>
+                    {/* <MyMapScreen/> */}
+                    <CurrentLocalMap location={location.coords}/>
                 </View>
+
             </View>
             <Footer/>
         </View>

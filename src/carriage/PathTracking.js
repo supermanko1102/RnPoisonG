@@ -24,7 +24,7 @@ export default function PathTracking({ navigation }) {
                     }
                 });
                 const reportList = res.data.DTddlist;
-                console.log('reportList',reportList)
+                // console.log('reportList',reportList)
                 setData(reportList);
                 
                 setLoading(false)
