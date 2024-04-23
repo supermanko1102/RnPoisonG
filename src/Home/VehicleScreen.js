@@ -1,14 +1,14 @@
-import { Image, Text, View } from "react-native";
-import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { View } from "react-native";
+import WebView from "react-native-webview";
+import Banner from "../Component/Banner";
 export default function VehicleScreen(){
     return (
-    <View className='flex-1 justify-center items-center'>
-        <Text className='text-4xl'>功能開發中</Text>
-        <Image
-        source={require('../../Img/施工中.png')}
-        />
-        <ActivityIndicator animating={true} size='large' color={MD2Colors.red800} />
-        {/* <CurrentLocalMap/> */}
-    </View>
+        <View style={{ flex: 1 }}>
+            <Banner/>
+            <WebView
+            source={{ uri: 'https://onestop.moenv.gov.tw/portal/services/84' }}
+            style={{ flex: 1 }}
+            />
+      </View>
  )
 }

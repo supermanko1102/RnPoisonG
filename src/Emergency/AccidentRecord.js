@@ -7,7 +7,6 @@ import { Button } from "react-native-paper"
 import { useSelector } from "react-redux"
 import Banner from "../Component/Banner"
 import Footer from "../Component/Footer"
-import EmergencyLocationMap from "./EmergencyLocationMap"
 
 
 export  default function AccidentRecord ({navigation}){
@@ -70,9 +69,9 @@ export  default function AccidentRecord ({navigation}){
                     keyExtractor={item => item.ReturnTime} // key
                 />
                 {/* 地圖區 */}
-                <View>
+                {/* <View>
                     <EmergencyLocationMap/>
-                </View>
+                </View> */}
             </View>
             <Footer/>
         </View>

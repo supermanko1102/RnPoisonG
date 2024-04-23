@@ -1,11 +1,11 @@
 import { Text, View } from "react-native";
 import Banner from "../Component/Banner";
 import Footer from "../Component/Footer";
-import EmergencyLocationMap from "./EmergencyLocationMap";
-
+// import EmergencyLocationMap from "./EmergencyLocationMap";
+import EmergencyLocationMap from "../Component/EmergencyLocationMap";
 export default function EmergencyResult({route}){
     //看看有沒有拿到data
-    // console.log('getData',route.params.data)
+     console.log('getData',route.params.data)
     const EmergencyResultData = route.params.data
     return(
         //先撐開
@@ -20,8 +20,8 @@ export default function EmergencyResult({route}){
                     <Text>通報時間:{EmergencyResultData.ReturnTime}</Text>
                     <Text>通報座標:{EmergencyResultData.WGSLat},{EmergencyResultData.WGSLon}</Text>
                 </View>
-
-            <EmergencyLocationMap latitude={EmergencyResultData.WGSLat} longitude={EmergencyResultData.WGSLon}/>
+            <EmergencyLocationMap WGSLon = {EmergencyResultData.WGSLon} WGSLat={EmergencyResultData.WGSLat}/>
+            {/* <EmergencyLocationMap latitude={EmergencyResultData.WGSLat} longitude={EmergencyResultData.WGSLon}/> */}
             </View>
             <Footer/>
         </View>

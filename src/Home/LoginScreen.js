@@ -1,9 +1,9 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { setAccount, setDeviceNumber, setUserName } from '../store/modules/loginSlice';
-
+import React, { useRef, useState } from 'react';
 import { Alert, Image, ImageBackground, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch } from 'react-redux';
+import { Captcha } from 'rn-agmcaptchalite';
+import { setAccount, setDeviceNumber, setUserName } from '../store/modules/loginSlice';
 export default function LoginScreen({navigation}){
     //如果需要從元件中去改變store裡面的數據需要 dispatch
     // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
@@ -13,38 +13,23 @@ export default function LoginScreen({navigation}){
     const [deviceNumber,setDeviceNumberLocal] = useState('ABC-001')
     const [password, setPassword] = useState('cindy701');
     const [rememberUser,setRememberUser]= useState(false)
-    const [userName,SetUserNameLocal]= useState('')
-    const [captcha,SetCaptcha] = useState('')
+    // const [userName,SetUserNameLocal]= useState('')
 
     //begin::驗證碼 
-    
-    const [randomCode, setRandomCode] = useState('');
-
-    useEffect(() => {
-        generateRandomCode();
-    }, []);
-
-    const generateRandomCode = () => {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let code = '';
-        for (let i = 0; i < 4; i++) {
-            code += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        // console.log('Randomcode', code)
-        setRandomCode(code);
+    const captchaRef = useRef(null);
+    const captchaHandle = async () => {
+      const captchaResult = captchaRef.current.captchaChecking();
+    //   console.log(captchaResult,typeof(captchaResult))
+      return(captchaResult)
+      // If the user enters the correct captcha, captchaResult is true; otherwise, false
     };
-    const regenerateCode = () => {
-        generateRandomCode();
-    };
-    
     //end::驗證碼
     //begin::登入邏輯
     const handleLogin = async() => {
-        // dispatch(setLoginStatus(true))
-        // console.log('LoginNavigation',navigation)
+        //等待拿到captchaResult
+        const isCaptchaCorrect = await captchaHandle();
         dispatch(setDeviceNumber(deviceNumber));
         
-
         //begin::處理登入API
       const fetchLogApi = async()=>{
         try{
@@ -57,20 +42,25 @@ export default function LoginScreen({navigation}){
 
                 }
               })
-            console.log('username',response.data.IsProcessOK)
-            if(captcha !==randomCode){
+            // console.log('登入名稱',response.data.LoginName)
+            // if(captcha !==randomCode){
+            //     Alert.alert('驗證碼錯誤')
+            //     return
+            //   }
+            // console.log('isCaptchaCorrect',isCaptchaCorrect)
+            if(!isCaptchaCorrect){
                 Alert.alert('驗證碼錯誤')
                 return
-              }
-              if(response.data.IsProcessOK){
+            }
+            if(response.data.IsProcessOK){
                 navigation.navigate("MainIndex");
-                SetUserNameLocal(response.data.LoginName)
-                // console.log('userName',userName)
-                dispatch(setUserName(userName));
+                // SetUserNameLocal(response.data.LoginName)
+                // console.log('',userName)
+                dispatch(setUserName(response.data.LoginName));
                 dispatch(setAccount(account))
-              }else{
+            }else{
                 Alert.alert('登入失敗',response.data.Message)
-              }
+            }
         } catch(error){
             Alert.alert('登入失敗','網路錯誤,請稍後再試')
             dispatch(loginFailure('Network error'));
@@ -172,14 +162,24 @@ export default function LoginScreen({navigation}){
                     />
                 </View>
                 {/* 尚未開發驗證碼 */}
-                <View className="flex flex-row justify-center py-2">
-                    <Image
+                {/* <View className="flex flex-row justify-center py-2"> */}
+                <View className=' '>
+                    {/* <Image
                     source={require('../../Img/驗證碼.png')}
                     resizeMode="contain"
                     style={styles.logo}
 
-                    ></Image>
-                    <View 
+                    ></Image> */}
+                    <Captcha
+                    ref={captchaRef}
+                    inputStyle={styles.inputStyle}
+                    containerStyle={styles.containerStyle}
+                    captchaContainerStyle={styles.captchaContainerStyle}
+                    refreshButtonStyle={styles.refreshButtonStyle}
+                    addSpecialCharacter={false}
+                    captchaLength={4}
+                    />
+                    {/* <View 
                     className="flex-row w-64  py-2 h-[46] ml-4 pr-0">
                     <TextInput
                     value={captcha}
@@ -187,12 +187,7 @@ export default function LoginScreen({navigation}){
                     placeholder={'驗證碼'}
                     className="flex-initial w-32 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] mr-5 "
                     />
-                    <TouchableOpacity
-                    className="flex-initial w-32 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] ml-4 "
-                    onPress={regenerateCode}
-                    ><Text>{randomCode}</Text>
-                    </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>
                 <View className="flex flex-row justify-center">
                     <Text className="pt-3 pl-5">記憶帳號</Text>
@@ -203,9 +198,14 @@ export default function LoginScreen({navigation}){
                 </View>
                 <TouchableOpacity 
                 className="flex flex-row justify-center bg-indigo-700 rounded-full my-3 "
-                onPress={handleLogin}>
+                onPress={()=>{
+                    handleLogin()
+                }}>
                     <Text className="text-white text-xl px-5 py-3">登入</Text>
                 </TouchableOpacity>
+                {/* <TouchableOpacity onPress={captchaHandle}>
+                <Text className="text-white text-xl px-5 py-3">驗整</Text>
+                </TouchableOpacity> */}
             </View>
             {/* end::主要的content畫面 */}   
             <View
@@ -230,5 +230,19 @@ const styles = StyleSheet.create({
       width: 57,
       height: 57,
     },
-    
+    inputStyle:{
+        backgroundColor: 'white',
+    },
+    containerStyle:{
+        backgroundColor:'red',
+        flexDirection:'row',
+        justifyContent:'flex-start'
+        
+    },
+    captchaContainerStyle:{
+        backgroundColor:'gray',
+    },
+    refreshButtonStyle:{
+
+    }
   })

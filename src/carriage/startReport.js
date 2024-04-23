@@ -67,18 +67,24 @@ export default function StartReport({navigation}) {
   //end::
   //being::拿經緯度
   useEffect(()=>{
-    (async()=>{
+    const getLocation = async()=>{
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         return;
       }      
       let location = await Location.getCurrentPositionAsync({});
-      //  console.log('現在的經緯度',location)
+        
       setLocation(location);
+      console.log('現在的經緯度',location.coords)
       setLoading(false)
-    })()
-  },[location])
+    }
+    getLocation()
+    const intervalId = setInterval(getLocation,10000)
+    return () => {
+      clearInterval(intervalId);
+    };
+  },[])
   //end::拿經緯度
 //begin::loading
 if(loading){
@@ -124,7 +130,7 @@ if(loading){
                 </View>
                 <View className='w-11/12 self-center mt-2 mb-2' style={{flex:1}}>
                     {/* <MyMapScreen/> */}
-                    <CurrentLocalMap location={location.coords}/>
+                    <CurrentLocalMap latitude={location.coords.latitude} longitude={location.coords.longitude}/>
                 </View>
 
             </View>

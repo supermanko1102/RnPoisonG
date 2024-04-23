@@ -40,11 +40,11 @@ export default function EmergencyAccident(){
             return;
         }      
         let location = await Location.getCurrentPositionAsync({});
-        //   console.log('現在的經緯度',location.coords.longitude)
+           console.log('現在的經緯度',location.coords.longitude)
         setLocation(location);
         setLoading(false)
         })()
-    },[location])
+    },[])
     //end::拿經緯度
     
     const onToggleCarSwitch = () => SetCarSwitch(!carSwitch);
@@ -136,14 +136,14 @@ export default function EmergencyAccident(){
                     <Text>發生車禍</Text>
                 </View>
                 
-                <View className='flex-row self-center mt-20'>
+                <View className='flex-row self-center mt-5'>
                     <Switch value={itemSwitch} onValueChange={onToggleItemSwitch} />
                     <Text>貨物掉落</Text>
                     <Switch value={toxicSwitch} onValueChange={onToggleToxicSwitch} />
                     <Text>毒化物外洩</Text>
                 </View>
 
-                <TouchableOpacity className='self-center my-20 bg-sky-500 '
+                <TouchableOpacity className='self-center my-5 bg-sky-500 '
                 onPress={()=>{
                     // Add_Emergency_GPSByPhone()
                     toggleDialog()
@@ -156,7 +156,7 @@ export default function EmergencyAccident(){
 
                 <View className='w-11/12 self-center mt-2 mb-2' style={{flex:1}}>
                     {/* <MyMapScreen/> */}
-                    <CurrentLocalMap location={location.coords}/>
+                    <CurrentLocalMap latitude={location.coords.latitude} longitude={location.coords.longitude}/>
                 </View>
 
                 <Dialog isVisible={visible}>
