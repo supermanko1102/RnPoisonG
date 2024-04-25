@@ -22,7 +22,7 @@ export default function Banner(){
         <View className="mt-[60]">
             <View >
                 <Image
-                source={require('../../Img/環境部logo.png')}
+                source={require('../../Img/Enlogo.png')}
                 resizeMode="contain"
                 className="self-center">
                 </Image> 
