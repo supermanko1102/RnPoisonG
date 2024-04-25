@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "PoisonG",
-    "slug": "PoisonG",
+    "name": "PoisonG_01",
+    "slug": "PoisonG_01",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ic_toxicgpshistory.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",

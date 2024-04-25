@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useRef, useState } from 'react';
-import { Alert, Image, ImageBackground, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ImageBackground, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch } from 'react-redux';
 import { Captcha } from 'rn-agmcaptchalite';
 import { setAccount, setDeviceNumber, setUserName } from '../store/modules/loginSlice';
@@ -82,7 +82,7 @@ export default function LoginScreen({navigation}){
 
 
     return (
-        <View className="flex-1">
+        <ScrollView className="flex-1">
             <ImageBackground
             source={require('../../Img/bg_function.png')}
             className="h-screen flex-1"   
@@ -91,10 +91,10 @@ export default function LoginScreen({navigation}){
             <View className='grow'>
                 <View className=" flex-row mt-[40]">
                     <Image
-                    source={require('../../Img/環境部logo.png')}
+                    source={require('../../Img/Enlogo.png')}
                     resizeMode="contain"
                     className="self-center">
-                                            </Image>
+                    </Image>
                 </View>
 
                 <View className="py-12">
@@ -116,7 +116,7 @@ export default function LoginScreen({navigation}){
 
                 <View className="flex flex-row justify-center py-2">
                     <Image
-                    source={require('../../Img/人員.png')}
+                    source={require('../../Img/person.png')}
                     resizeMode="contain"
                     style={styles.logo}
                     className="flex-none "
@@ -131,7 +131,7 @@ export default function LoginScreen({navigation}){
                 </View>
                 <View className="flex flex-row justify-center py-2">
                     <Image
-                    source={require('../../Img/車輛.png')}
+                    source={require('../../Img/car.png')}
                     resizeMode="contain"
                     style={styles.logo}
                     className="flex-none "
@@ -148,7 +148,7 @@ export default function LoginScreen({navigation}){
                 
                 <View className="flex flex-row justify-center py-2">
                     <Image
-                    source={require('../../Img/密碼.png')}
+                    source={require('../../Img/password.png')}
                     resizeMode="contain"
                     style={styles.logo}
                                     ></Image>
@@ -163,7 +163,7 @@ export default function LoginScreen({navigation}){
                 </View>
                 {/* 尚未開發驗證碼 */}
                 {/* <View className="flex flex-row justify-center py-2"> */}
-                <View className=' '>
+                <View className=''>
                     {/* <Image
                     source={require('../../Img/驗證碼.png')}
                     resizeMode="contain"
@@ -178,6 +178,7 @@ export default function LoginScreen({navigation}){
                     refreshButtonStyle={styles.refreshButtonStyle}
                     addSpecialCharacter={false}
                     captchaLength={4}
+                    refreshIcon={<Text className='text-xl'>重取驗證碼</Text>}
                     />
                     {/* <View 
                     className="flex-row w-64  py-2 h-[46] ml-4 pr-0">
@@ -220,7 +221,7 @@ export default function LoginScreen({navigation}){
             </ImageBackground>
             {/* Props  */}
             {/* {f && < Banner deviceNumber={deviceNumber} userName={userName}/>} */}
-        </View>
+        </ScrollView>
     )
     
 }
@@ -231,18 +232,22 @@ const styles = StyleSheet.create({
       height: 57,
     },
     inputStyle:{
-        backgroundColor: 'white',
+        borderRadius: 5,
+        backgroundColor: '#EFF6FF',
     },
     containerStyle:{
-        backgroundColor:'red',
-        flexDirection:'row',
-        justifyContent:'flex-start'
-        
+        backgroundColor: 'transparent',
+        justifyContent:'center',
+        marginTop: 0,
     },
     captchaContainerStyle:{
         backgroundColor:'gray',
     },
     refreshButtonStyle:{
-
-    }
+        borderStyle: 'solid',
+        borderColor: '#000',
+        borderWidth: 1.5,
+        borderRadius: 5,
+        padding: 5,
+    },
   })
