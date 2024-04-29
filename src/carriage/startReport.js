@@ -1,8 +1,9 @@
 import axios from 'axios';
 import * as Location from 'expo-location';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { Alert, FlatList, Text, View } from 'react-native';
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
+
 import { useSelector } from 'react-redux';
 import Banner from "../Component/Banner";
 import CurrentLocalMap from '../Component/CurrentLocalMap';
@@ -34,7 +35,7 @@ export default function StartReport({navigation}) {
   const modifyList = res.data.DTddlist.map(item =>{
     return {
       ...item,
-      ReturnTimeFrom: item.ReturnTime // 將ReturnTime改成ReturnTimeTo
+      ReturnTimeFrom: item.ReturnTime // 將ReturnTime改成ReturnTimeFrom
   }
   })
   setDataFrom(modifyList)
@@ -66,25 +67,34 @@ export default function StartReport({navigation}) {
   },[]);
   //end::
   //being::拿經緯度
-  useEffect(()=>{
-    const getLocation = async()=>{
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }      
-      let location = await Location.getCurrentPositionAsync({});
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          Alert.alert('拒絕使用經位度');
+          return;
+        }
         
-      setLocation(location);
-      console.log('現在的經緯度',location.coords)
-      setLoading(false)
-    }
-    getLocation()
-    const intervalId = setInterval(getLocation,10000)
+        let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
+        console.log('現在的經緯度', location);
+        setLocation(location);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error getting location:', error);
+        setErrorMsg('Error getting location');
+      }
+    };
+  
+    getLocation();
+  
+    const intervalId = setInterval(getLocation, 4000);
+  
     return () => {
       clearInterval(intervalId);
     };
-  },[])
+  }, []);
   //end::拿經緯度
 //begin::loading
 if(loading){

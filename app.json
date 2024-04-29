@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "PoisonG_01",
-    "slug": "PoisonG_01",
+    "name": "PoisonG",
+    "slug": "PoisonG",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/ic_toxicgpshistory.png",
@@ -15,8 +15,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.alexanderko.PoisonG"
+      "bundleIdentifier": "PoisonG",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +29,8 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.alexanderko.PoisonG"
+      "package": "com.alexanderko.PoisonG",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,8 +45,11 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "f24bc619-2091-4e12-8071-ac9b04717c9f"
+        "projectId": "b78df424-68da-4b5f-a9a4-7d0e846725f1"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b78df424-68da-4b5f-a9a4-7d0e846725f1"
     }
   }
 }
