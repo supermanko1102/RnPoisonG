@@ -71,13 +71,23 @@ export default function StartReport({navigation}) {
     const getLocation = async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
+        console.log('status',status)
         if (status !== 'granted') {
           setErrorMsg('Permission to access location was denied');
           Alert.alert('拒絕使用經位度');
           return;
         }
+        // 請求後台
+        let backgroundPermission = await Location.requestBackgroundPermissionsAsync();
+        console.log('backgroundPermission',backgroundPermission.status)
+        if (backgroundPermission.status !== 'granted') {
+          setErrorMsg('Permission to access background location was denied');
+          Alert.alert('拒絕使用背景經位度');
+          return;
+        }
+
         
-        let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
+        let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest,  allowBackgroundLocationUpdates: true,});
         console.log('現在的經緯度', location);
         setLocation(location);
         setLoading(false);

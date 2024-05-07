@@ -1,4 +1,4 @@
-package com.alexanderko.PoisonG
+package com.alexanderko.PoisonG01
 
 import android.app.Application
 import android.content.res.Configuration

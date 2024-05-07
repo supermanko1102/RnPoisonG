@@ -76,6 +76,7 @@ export default function LoginScreen({navigation}){
     //begin::記憶帳號
     const handleRememberUser = ()=>{
         setRememberUser(!rememberUser)
+        
     }
     //end::記憶帳號
 
