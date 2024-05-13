@@ -16,10 +16,11 @@
     ],
     "ios": {
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch", "remote-notification"],
-        "NSLocationWhenInUseUsageDescription": "This app requires access to your location when open.",
-        "NSLocationAlwaysUsageDescription":  "This app requires access to your location when open.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app requires access to your location even when closed."
+        "UIBackgroundModes": ["location", "fetch"],
+        "NSLocationUsageDescription": "啟用定位服務 才能使用定位功能",
+        "NSLocationWhenInUseUsageDescription": "啟用定位服務 才能使用定位功能",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "啟用定位服務 才能使用背景定位功能",
+        "NSLocationAlwaysUsageDescription": "啟用定位服務 才能使用背景定位功能"
       },
       "bundleIdentifier": "PoisonGIos01",
       "runtimeVersion": {
@@ -28,16 +29,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./Img/person.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",        
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
-        "android.permission.ACCESS_BACKGROUND_LOCATION",
-        "ACCESS_BACKGROUND_LOCATION"
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
       ],
-      "package": "com.alexanderko.PoisonG01",
+      "package": "com.alexanderko.PoisonG",
       "runtimeVersion": "1.0.0"
     },
     "web": {
@@ -47,7 +51,10 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PoisonG) to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PoisonG) to use your location.",
+          "isAndroidForegroundServiceEnabled":true,
+          "isAndroidBackgroundLocationEnabled":true
+
         }
       ]
     ],

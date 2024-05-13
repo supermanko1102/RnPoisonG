@@ -1,21 +1,29 @@
 import axios from 'axios';
 import * as Location from 'expo-location';
+import * as TaskManager from 'expo-task-manager';
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Text, View } from 'react-native';
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
-
 import { useSelector } from 'react-redux';
 import Banner from "../Component/Banner";
 import CurrentLocalMap from '../Component/CurrentLocalMap';
 import Footer from "../Component/Footer";
 import ReportItem from './ReportItem';
+const LOCATION_TRACKING = 'location-tracking';
+
+var l1;
+var l2;
 export default function StartReport({navigation}) {
   
   //先拿到車輛資訊
   const carNumber = useSelector(state => state.login.deviceNumber);
   //設定目前拿到的經緯度
-  const [location, setLocation] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState({latitude:0,longitude:0});
+  const [startLocation ,setStartLocation] = useState({latitude:0,longitude:0})
+
   const [errorMsg, setErrorMsg] = useState(null);
+  //背景模式下執行
+  const [locationStarted, setLocationStarted] = useState(false);
   //放置api的data
   const [dataFrom, setDataFrom] = useState([]);
   const [dataTo, setDataTo] = useState([]);
@@ -85,27 +93,68 @@ export default function StartReport({navigation}) {
           Alert.alert('拒絕使用背景經位度');
           return;
         }
-
-        
-        let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest,  allowBackgroundLocationUpdates: true,});
-        console.log('現在的經緯度', location);
-        setLocation(location);
-        setLoading(false);
+         let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
+         console.log('現在的經緯度', location);
+         setStartLocation({
+          ...startLocation,
+          latitude:location.coords.latitude,
+          longitude:location.coords.longitude
+         });
+         setLoading(false);
       } catch (error) {
         console.error('Error getting location:', error);
         setErrorMsg('Error getting location');
       }
     };
-  
+    //
+    const startLocationTracking = async () => {
+      await Location.startLocationUpdatesAsync(LOCATION_TRACKING, {
+          accuracy: Location.Accuracy.Highest,
+          timeInterval: 5000,
+          distanceInterval: 0,
+      });
+      const hasStarted = await Location.hasStartedLocationUpdatesAsync(
+          LOCATION_TRACKING
+      );
+      setLocationStarted(hasStarted);
+      console.log('tracking started?', hasStarted);
+    };
+
+    startLocationTracking()
     getLocation();
   
-    const intervalId = setInterval(getLocation, 4000);
+    // const intervalId = setInterval(getLocation, 4000);
   
-    return () => {
-      clearInterval(intervalId);
-    };
+    // return () => {
+    //   clearInterval(intervalId);
+    // };
   }, []);
+  TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
+    if (error) {
+        console.log('LOCATION_TRACKING task ERROR:', error);
+        return;
+    }
+    if (data) {
+        const { locations } = data;
+        let lat = locations[0].coords.latitude;
+        let long = locations[0].coords.longitude;
+        //console.log(`${new Date(Date.now()).toLocaleString()}: ${lat},${long}`);
+        
+
+        setCurrentLocation({
+          ...currentLocation,
+          latitude:lat,
+          longitude:long
+        })
+         // console.log("location是",currentLocation.latitude,currentLocation.longitude)
+    }
+});
   //end::拿經緯度
+//
+
+//
+
+
 //begin::loading
 if(loading){
   return (<View className='flex-1 justify-center items-center'>
@@ -130,7 +179,7 @@ if(loading){
 });
   //  console.log('mergedList',mergedList)
   //end::merge from && to datalist
-  const renderItem = ({ item }) => <ReportItem item={item} latitude={location.coords.latitude} longitude={location.coords.longitude} />; // 把每一個datalist 做component
+  const renderItem = ({ item }) => <ReportItem item={item} location={currentLocation} startLocation={startLocation}/>; // 把每一個datalist 做component
 
     return (        
         <View className="flex-1">
@@ -150,7 +199,7 @@ if(loading){
                 </View>
                 <View className='w-11/12 self-center mt-2 mb-2' style={{flex:1}}>
                     {/* <MyMapScreen/> */}
-                    <CurrentLocalMap latitude={location.coords.latitude} longitude={location.coords.longitude}/>
+                    <CurrentLocalMap location={currentLocation}/>
                 </View>
 
             </View>

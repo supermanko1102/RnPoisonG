@@ -1,22 +1,33 @@
 import { Button, CheckBox, Dialog } from "@rneui/themed";
 import axios from "axios";
-import React, { useEffect, useRef, useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useSelector } from "react-redux";
 
-export default function ReportItem({ item ,latitude,longitude}) {
-
-    //console.log('從開始申報拿到的item是:',item)
+export default function ReportItem({ item ,location,startLocation}) {
+    //  console.log('startLocation',startLocation)
+    // console.log('從開始申報拿到的item是:',item,location.l1,location.l2)
     // console.log('從開始申報拿到的returnTimes是:',returnTimes)
     //   console.log('從開始申報拿到的經緯度是:',latitude,longitude)
     //!!!!! begin::存經緯度
-    const savelatitudeRef = useRef(latitude);
-    const savelongitudeRef = useRef(longitude); 
-    useEffect(()=>{
-        savelatitudeRef.current = latitude;
-        savelongitudeRef.current = longitude;
-    },[latitude,longitude])
+    // const savelatitudeRef = useRef(latitude);
+    // const savelongitudeRef = useRef(longitude); 
+    // useEffect(()=>{
+    //     savelatitudeRef.current = latitude;
+    //     savelongitudeRef.current = longitude;
+    // },[latitude,longitude])
     //!!!!! end::存經緯度
+    //
+    // useEffect(()=>{
+    //     const getLocation = async()=>{
+    //         let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
+    //         console.log('現在的經緯度', location);
+    //         setStartLocation(location);
+    //     }
+    //     getLocation()
+    // },[]) 
+    //
 
      //get userName and DeviceNumber from Redux
      const carNumber = useSelector(state => state.login.deviceNumber);
@@ -93,7 +104,13 @@ export default function ReportItem({ item ,latitude,longitude}) {
         default:
     }},[])
     //eng::
+    //
+    
+    //
+    //
 
+
+    //
     //begin::申報起迄運API
     const Add_ddlist_GPSByPhone = async (StartorEnd)=>{
         const StartPoint = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx',{
@@ -103,8 +120,8 @@ export default function ReportItem({ item ,latitude,longitude}) {
           Fac_no:userName,
           Plate_no:carNumber,
           deviceNumber:'',
-          WGSLon:longitude,
-          WGSLat:latitude,
+          WGSLon:startLocation.longitude,
+          WGSLat:startLocation.latitude,
           ListNo:item.listno,
           DeclareType:StartorEnd
         }
@@ -130,8 +147,8 @@ export default function ReportItem({ item ,latitude,longitude}) {
               Plate_no:carNumber,
               deviceNumber:'AAAAAAAA-4444-5555-AAAA-333333333333',
               deviceType:'IOS',
-              WGSLon:savelongitudeRef.current,
-              WGSLat:savelatitudeRef.current,
+              WGSLon:location.longitude,
+              WGSLat:location.latitude,
               ListNo:item.listno,
             }
             });
@@ -187,7 +204,6 @@ export default function ReportItem({ item ,latitude,longitude}) {
         const AlertShow= await Add_ddlist_GPSByPhone('From')
          
         if(AlertShow){
-        console.log('我要開始申報拉');
         // 起點反灰
         setStartChecked(true);
         setStartDisabled(true)
@@ -318,7 +334,9 @@ export default function ReportItem({ item ,latitude,longitude}) {
                 <Dialog.Title title={item.listno + "是否同意要開始申報"}/>
                 <Dialog.Actions>
                     <Dialog.Button title="不同意" onPress={toggleDialogStart}/>
-                    <Dialog.Button title="同意" onPress={handleAgreeStart}/>
+                    <Dialog.Button title="同意" onPress={()=>{
+                        handleAgreeStart()
+                    }}/>
                 </Dialog.Actions>
             </Dialog>
             <Dialog isVisible={visibleEnd}>

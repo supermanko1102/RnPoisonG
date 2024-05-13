@@ -29,7 +29,7 @@ export default function EmergencyAccident(){
 
 
     //設定目前拿到的經緯度
-    const [location, setLocation] = useState(null);
+    const [location, setLocation] = useState({latitude:0,longitude:0});
     const [errorMsg, setErrorMsg] = useState(null);
     //being::拿經緯度
     useEffect(()=>{
@@ -41,7 +41,10 @@ export default function EmergencyAccident(){
         }      
         let location = await Location.getCurrentPositionAsync({});
            console.log('現在的經緯度',location.coords.longitude)
-        setLocation(location);
+        setLocation({...location,
+            latitude:location.coords.latitude,
+            longitude:location.coords.longitude
+        });
         setLoading(false)
         })()
     },[])
@@ -156,7 +159,7 @@ export default function EmergencyAccident(){
 
                 <View className='w-11/12 self-center mt-2 mb-2' style={{flex:1}}>
                     {/* <MyMapScreen/> */}
-                    <CurrentLocalMap latitude={location.coords.latitude} longitude={location.coords.longitude}/>
+                    <CurrentLocalMap location={location}/>
                 </View>
 
                 <Dialog isVisible={visible}>
