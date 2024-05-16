@@ -303,9 +303,7 @@ export default function ReportItem({ item ,location,startLocation,startGetBackgr
                 <Dialog.Title title={item.listno + "是否同意要開始申報"}/>
                 <Dialog.Actions>
                     <Dialog.Button title="不同意" onPress={toggleDialogStart}/>
-                    <Dialog.Button title="同意" onPress={()=>{
-                        handleAgreeStart()
-                    }}/>
+                    <Dialog.Button title="同意" onPress={handleAgreeStart}/>
                 </Dialog.Actions>
             </Dialog>
             <Dialog isVisible={visibleEnd}>

@@ -124,7 +124,7 @@ export default function StartReport({navigation}) {
     const getLocation = async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        console.log('status',status)
+        console.log('請求前台',status)
         if (status !== 'granted') {
           setErrorMsg('Permission to access location was denied');
           Alert.alert('拒絕使用經位度');
@@ -132,7 +132,7 @@ export default function StartReport({navigation}) {
         }
         // 請求後台
         let backgroundPermission = await Location.requestBackgroundPermissionsAsync();
-        console.log('backgroundPermission',backgroundPermission.status)
+        console.log('請求後台',backgroundPermission.status)
         if (backgroundPermission.status !== 'granted') {
           setErrorMsg('Permission to access background location was denied');
           Alert.alert('拒絕使用背景經位度');
@@ -156,6 +156,7 @@ export default function StartReport({navigation}) {
         setErrorMsg('Error getting location');
       }
     };
+
     //
     startLocationTracking()
     getLocation();
@@ -190,7 +191,14 @@ if(loading){
   };
   });
 //end::merge from && to datalist
-  const renderItem = ({ item }) => <ReportItem item={item} location={currentLocation} startLocation={startLocation} startGetBackgroundLocation={startLocationTracking} stopGetBackgroundLocation={stopLocation}/>; // 把每一個datalist 做component
+  const renderItem = ({ item }) => 
+  <ReportItem 
+  item={item} 
+  location={currentLocation}
+  startLocation={startLocation} 
+  startGetBackgroundLocation={startLocationTracking} 
+  stopGetBackgroundLocation={stopLocation}
+  />; // 把每一個datalist 做component
 
   return (        
       <View className="flex-auto bg-white">

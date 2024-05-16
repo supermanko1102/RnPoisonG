@@ -1,20 +1,17 @@
 import { CheckBox } from '@rneui/themed';
 import axios from 'axios';
-import * as Location from "expo-location";
 import React, { useRef, useState } from 'react';
 import { Alert, Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 import { Captcha } from 'rn-agmcaptchalite';
-import { GPSTrackLocation } from '../GetLocation/GetLocation';
 import { setAccount, setDeviceNumber, setUserName } from '../store/modules/loginSlice';
 export default function LoginScreen({navigation}){
     //如果需要從元件中去改變store裡面的數據需要 dispatch
     // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
     const dispatch =useDispatch()
-
-    const [account, setAccountLocal] = useState('');
-    const [password, setPassword] = useState('');
-    const [deviceNumber,setDeviceNumberLocal] = useState('')
+    const [account, setAccountLocal] = useState('G0000001');
+    const [password, setPassword] = useState('cindy701');
+    const [deviceNumber,setDeviceNumberLocal] = useState('ABC-001')
     const [rememberUser,setRememberUser]= useState(true)
     // const [userName,SetUserNameLocal]= useState('')
     //記憶帳號
@@ -33,11 +30,6 @@ export default function LoginScreen({navigation}){
     //end::驗證碼
     //begin::登入邏輯
     const handleLogin = async() => {
-        //測試
-        let { status } = await Location.getBackgroundPermissionsAsync();
-        if(status=="granted"){
-            GPSTrackLocation().StartLocationTracking()
-        } //測試
         //等待拿到captchaResult
         const isCaptchaCorrect = await captchaHandle();
         dispatch(setDeviceNumber(deviceNumber));
@@ -94,9 +86,6 @@ export default function LoginScreen({navigation}){
         setRememberUser(!rememberUser)
     }
     //end::記憶帳號
-
-
-
     return (
         <ScrollView>
             <ImageBackground
@@ -108,17 +97,17 @@ export default function LoginScreen({navigation}){
                 <Image
                 source={require('../../Img/Enlogo.png')}
                 resizeMode="contain"
-                className="self-center">
+                className="mx-auto left-2">
                 </Image>
                 <View className="mt-4">
                     <Text
                     style={styles.titleBackground}
-                    className="text-3xl  self-center">
+                    className="text-3xl  self-center font-bold ">
                         毒性及關注化學物質
                     </Text>
                     <Text
                     style={styles.titleBackground}
-                    className="text-3xl self-center">
+                    className="text-3xl self-center font-bold font-mono">
                         小量運送軌跡紀錄系統
                     </Text>
                 </View>
@@ -133,7 +122,7 @@ export default function LoginScreen({navigation}){
                             value={account}
                             onChangeText={(text) => setAccountLocal(text)}
                             placeholder={'帳 號'}
-                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-2 pl-1"
+                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-2 pl-1 text-xl"
                         />
                         <View className='flex-row right-2'>
                             <CheckBox
@@ -144,10 +133,10 @@ export default function LoginScreen({navigation}){
                         </View>
 
                     </View>
-                    <View className="flex-row justify-start left-1 py-1 bottom-2">
+                    <View className="flex-row justify-start left-1 py-2 bottom-2">
                         <Image
                         source={require('../../Img/LoginPassword.png')}
-                        resizeMode="contain"
+                        resizeMode="cover"
                         style={styles.logo}
                         ></Image>
                         <TextInput
@@ -155,7 +144,7 @@ export default function LoginScreen({navigation}){
                             onChangeText={(text) => setPassword(text)}
                             placeholder={'密碼'}
                             secureTextEntry={true}
-                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-1 pl-1"
+                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-1 pl-1 text-xl pb-2"
 
                         />
                     </View>
@@ -170,7 +159,7 @@ export default function LoginScreen({navigation}){
                             value={deviceNumber}
                             onChangeText={(text) => setDeviceNumberLocal(text)}
                             placeholder={'車輛號碼'}
-                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-1 pl-1"
+                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-1 pl-1 text-xl"
 
                         />
                     </View>           
@@ -183,18 +172,18 @@ export default function LoginScreen({navigation}){
                         refreshButtonStyle={styles.refreshButtonStyle}
                         addSpecialCharacter={false}
                         captchaLength={4}
-                        refreshIcon={<Text>重取驗證碼</Text>}
                         />
                     </View>
+                    <Text className='text-xl left-2'>點選圖片變更驗證碼</Text>
                 <View
-                className='flex-row mt-4 ml-4'
+                className='mt-4 mx-auto'
                 >
                 <TouchableOpacity
                 style={styles.loginBack} 
                 onPress={()=>{
                     handleLogin()
                 }}>
-                    <Text className="text-white text-2xl px-4 py-1">登入</Text>
+                    <Text className="text-white text-4xl px-4 py-2 ">登入</Text>
                 </TouchableOpacity>
 
                 {/* <Image
@@ -237,7 +226,8 @@ const styles = StyleSheet.create({
     },
     captchaContainerStyle:{
         height:40,
-        backgroundColor:'gray',
+        backgroundColor:'#E8F7FF',
+
     },
     refreshButtonStyle:{
         borderStyle: 'solid',

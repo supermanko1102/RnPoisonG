@@ -65,38 +65,56 @@ export default function PathTrackResult({route}){
             <Banner/>
             <View className='flex-1'>
                 <Text
-                className="self-center text-xl mt-4"
+                className="self-center text-xl mt-4 font-bold"
                 >
                     軌跡申報結果
                 </Text>
-                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 py-1'>
-                    <Text className=''>
-                        表 單 號 碼: {trackResult.listno}
+                <View className=' self-center border-b border-dashed border-gray-400 w-10/12 py-1'>
+                    <Text className='font-bold text-xl'>
+                        表 單 號 碼: 
+                    </Text>
+                    <Text className='text-xl'>
+                    {trackResult.listno}
                     </Text>
                 </View>
-                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
-                    <Text >
-                        運 送 車 號: {trackResult.Plate_no}
+                <View className='self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text className='font-bold text-xl'>
+                        運 送 車 號:
+                    </Text>
+                    <Text className='text-xl'>
+                        {trackResult.Plate_no}
                     </Text>
                 </View>
-                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
-                    <Text>
-                        起運申報座標: {trackResult.FromLat},{trackResult.FromLon}
+                <View className='self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text className='font-bold text-xl'>
+                        起運申報座標:
+                    </Text>
+                    <Text className='text-xl' >
+                        {trackResult.FromLat},{trackResult.FromLon}
                     </Text>
                 </View>
-                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
-                    <Text>
-                        起運申報時間: {trackResult.FromTime}
+                <View className='self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text className='text-xl font-bold'>
+                        起運申報時間：
+                    </Text>
+                    <Text className='text-xl'>
+                        {trackResult.FromTime}
                     </Text>
                 </View>
-                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
-                    <Text >
-                        迄運申報座標: {trackResult.ToLat},{trackResult.ToLon}
+                <View className='self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text className='text-xl font-bold'>
+                        迄運申報座標：
+                    </Text>
+                    <Text className='text-xl'>
+                        {trackResult.ToLat},{trackResult.ToLon}
                     </Text>
                 </View>
-                <View className='flex-row self-center  w-10/12 pb-1'>
-                    <Text>
-                        迄運申報時間: {trackResult.ToTime}
+                <View className='self-center  w-10/12 pb-1'>
+                    <Text className='text-xl font-bold'>
+                        迄運申報時間：
+                    </Text>
+                    <Text className='text-xl'>
+                        {trackResult.ToTime}
                     </Text>
                 </View>
                 {/* Begin::MapView */}

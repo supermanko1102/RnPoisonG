@@ -20,7 +20,7 @@ export default function IndexNavigator({navigation}) {
        headerShown: false,
        tabBarActiveTintColor: "#399584",
        tabBarInactiveTintColor: "#4EA091",
-       tabBarStyle: { height: 100, paddingBottom: 10 ,backgroundColor:'#f9f9f9'},
+       tabBarStyle: { height: '10%', paddingBottom: '1%' ,backgroundColor:'#f9f9f9'},
      })}
    >
     <Tab.Screen
@@ -36,8 +36,10 @@ export default function IndexNavigator({navigation}) {
            ) : (
             //  <Ionicons name="home-outline" size={size} color={color} />
             <Image style={style.navigatorlogo} source={require('../Img/Navigator/home-2.png')}/>
-
            ),
+           tabBarLabelStyle :{
+            fontSize: 16, 
+           }
        }}
      />
      <Tab.Screen
@@ -54,6 +56,9 @@ export default function IndexNavigator({navigation}) {
             <Image style={style.navigatorlogo} source={require('../Img/Navigator/transport-2.png')}/>
             // <Ionicons name="car-outline" size={24} color="black" />
            ),
+           tabBarLabelStyle :{
+            fontSize: 16, 
+           }
        }}
      />
      <Tab.Screen
@@ -70,6 +75,9 @@ export default function IndexNavigator({navigation}) {
             <Image style={style.navigatorlogo} source={require('../Img/Navigator/list-2.png')}/>
             //<AntDesign name="form" size={24} color="black" />
            ),
+           tabBarLabelStyle :{
+            fontSize: 16, 
+           }
        }}
      />
      <Tab.Screen
@@ -86,6 +94,9 @@ export default function IndexNavigator({navigation}) {
             <Image style={style.navigatorlogo} source={require('../Img/Navigator/urgent-2.png')}/>
             //<MaterialIcons name="emergency" size={24} color="black" />
            ),
+           tabBarLabelStyle :{
+            fontSize: 16, 
+           }
        }}
      />
      <Tab.Screen
@@ -102,6 +113,9 @@ export default function IndexNavigator({navigation}) {
             <Image style={style.navigatorlogo} source={require('../Img/Navigator/inspection-2.png')}/>
             //<Fontisto name="preview" size={24} color="black" />
            ),
+           tabBarLabelStyle :{
+            fontSize: 16, 
+           }
        }}
      />
    </Tab.Navigator>

@@ -7,7 +7,6 @@ import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useSelector } from "react-redux";
 import Banner from "../Component/Banner";
 import CurrentLocalMap from "../Component/CurrentLocalMap";
-import Footer from "../Component/Footer";
 
 export default function EmergencyAccident(){
     const [carSwitch,SetCarSwitch] = useState(false)
@@ -132,35 +131,32 @@ export default function EmergencyAccident(){
                 運送過程中若發生緊急事故,請勾選事故樣態並按下通報鍵
             </Text> */}
 
-                <View className='flex-row justify-between w-8/12 self-center'>
+                <View className='flex-row justify-between w-8/12 self-center my-[5vh]'>
                     <View className='flex-row mt-2'>
-                        <Switch className='top-1' value={carSwitch} onValueChange={onToggleCarSwitch} />
-                        <Text className='text-xl pt-2'>車輛故障</Text>
+                        <Switch className='top-1 ' value={carSwitch} onValueChange={onToggleCarSwitch} />
+                        <Text className='text-xl pt-2 mx-2 font-medium'>車輛故障</Text>
                     </View>
                     <View className='flex-row mt-2'>
                         <Switch className='top-1' value={accidentSwitch} onValueChange={onToggleAccidentSwitch} />
-                        <Text className='text-xl pt-2'>發生車禍</Text>
+                        <Text className='text-xl pt-2 mx-2 font-medium'>發生車禍</Text>
                     </View>
                 </View>
                 
-                <View className='flex-row justify-between w-8/12 self-center'>
+                <View className='flex-row justify-between w-8/12 self-center mb-[5vh]'>
                     <View className='flex-row mt-2'>
                         <Switch className='top-1' value={itemSwitch} onValueChange={onToggleItemSwitch} />
-                        <Text className='text-xl pt-2'>貨物掉落</Text>
+                        <Text className='text-xl pt-2 mx-2 font-medium'>貨物掉落</Text>
                     </View>
                     <View className='flex-row mt-2'>
                         <Switch className='top-1' value={toxicSwitch} onValueChange={onToggleToxicSwitch} />
-                        <Text className='text-xl pt-2'>物質外洩</Text>
+                        <Text className='text-xl pt-2 mx-2 font-medium'>物質外洩</Text>
                     </View> 
                 </View>
 
                 <TouchableOpacity 
                 style={styles.buttonBackground}
-                className='self-center rounded-full'
-                onPress={()=>{
-                    // Add_Emergency_GPSByPhone()
-                    toggleDialog()
-                }}
+                className='self-center rounded-full mb-[2vh]'
+                onPress={toggleDialog}
                 >
                     <Text className='text-xl text-white p-2'>
                         緊急通報
@@ -173,7 +169,7 @@ export default function EmergencyAccident(){
                 </View>
 
                 <Dialog isVisible={visible}>
-                <Dialog.Title title={"是否同意要緊急申報"}/>
+                <Dialog.Title title={"是否同意要緊急通報"}/>
                 <Dialog.Actions>
                     <Dialog.Button title="不同意" onPress={toggleDialog}/>
                     <Dialog.Button title="同意" onPress={()=>{
@@ -183,7 +179,6 @@ export default function EmergencyAccident(){
                 </Dialog.Actions>
                 </Dialog>
         </View>
-        <Footer/>
     </View>
     )
 }

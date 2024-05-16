@@ -48,7 +48,7 @@ export default function PathTracking({ navigation }) {
     return (
         <View className=''>
             <Banner />
-            <Text className='text-2xl self-center mt-4'>表單申報</Text>
+            <Text className='text-2xl self-center mt-4'>今日已申報軌跡查詢</Text>
             <View className='w-10/12 self-center'>
                 <SimpleFlatList data={data} onPressItem={handleTrackResult} />
             </View>

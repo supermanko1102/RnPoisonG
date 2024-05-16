@@ -90,17 +90,15 @@ export default function IndexScreen({ navigation}) {
           fetchDetailData(item.SerNo); // 調用B API
         }
       }
-      className=' m-6 rounded-lg p-1'
+      className='m-6 rounded-lg '
       style={style.FlatListStyle}
       >
-          <Text className='text-xl left-4'>{item.StartDate}</Text>
+          <Text className='text-xl p-2'>{item.StartDate}</Text>
         {/* <View className='w-1/12 items-center self-center'>
         <MaterialIcons name="campaign" size={36} color="black"/>
         </View> */}
 
-          <Text className='text-xl left-4' >{item.Subject}</Text>
-
-        
+          <Text className='text-xl p-2' >{item.Subject}</Text>
       </TouchableOpacity>
     </View>
   )
@@ -108,27 +106,24 @@ export default function IndexScreen({ navigation}) {
     
     <View className='bg-white' >
       <Banner/>
-      <View className='flex-row justify-between mt-4'>
+      <View className='flex-row justify-between mt-4 w-10/12 self-center'>
       <Text
-        className="text-3xl mt-4 left-4" >
+        className="text-3xl pt-4 right-2" >
             最新消息
       </Text>
       <Image
       source={require('../../Img/calendar.png')}
       resizeMode="contain"
       style={style.logo}
-      className='right-4 top-2'
-
+      className='top-3'
       ></Image>
       </View>
-      
-      
-        <FlatList
-          data={data} // data
-          renderItem={renderItem} // 選染列表的函數
-          keyExtractor={item => item.SerNo} // key
-          />
-      
+      <FlatList
+        data={data} // data
+        renderItem={renderItem} // 選染列表的函數
+        keyExtractor={item => item.SerNo} // key
+        className='mb-[20vh] mt-2'
+      />
       <Dialog
       isVisible={visible}
       onBackdropPress={toggleDialog}
