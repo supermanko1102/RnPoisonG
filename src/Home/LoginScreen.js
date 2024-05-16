@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as Location from "expo-location";
 import React, { useRef, useState } from 'react';
 import { Alert, Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Captcha } from 'rn-agmcaptchalite';
 import { GPSTrackLocation } from '../GetLocation/GetLocation';
 import { setAccount, setDeviceNumber, setUserName } from '../store/modules/loginSlice';
@@ -12,12 +12,16 @@ export default function LoginScreen({navigation}){
     // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
     const dispatch =useDispatch()
 
-    const [account, setAccountLocal] = useState('G0000001');
-    const [deviceNumber,setDeviceNumberLocal] = useState('ABC-001')
-    const [password, setPassword] = useState('cindy701');
-    const [rememberUser,setRememberUser]= useState(false)
+    const [account, setAccountLocal] = useState('');
+    const [password, setPassword] = useState('');
+    const [deviceNumber,setDeviceNumberLocal] = useState('')
+    const [rememberUser,setRememberUser]= useState(true)
     // const [userName,SetUserNameLocal]= useState('')
+    //記憶帳號
+    const rememberAccount = useSelector(state => state.login.account);
+    const rememberPassword = useSelector(state => state.login.password);
 
+    //
     //begin::驗證碼 
     const captchaRef = useRef(null);
     const captchaHandle = async () => {
@@ -65,13 +69,18 @@ export default function LoginScreen({navigation}){
                 // console.log('',userName)
                 dispatch(setUserName(response.data.LoginName));
                 dispatch(setAccount(account))
+                dispatch(setPassword(password))
+                if(!rememberUser){
+                    setAccountLocal(rememberAccount)
+                    setPassword(rememberPassword)
+                }
             }else{
-                Alert.alert('登入失敗',response.data.Message)
+                Alert.alert('登入失敗,請確定帳密是否正確',response.data.Message)
+                return
             }
         } catch(error){
-            Alert.alert('登入失敗','網路錯誤,請稍後再試')
-            dispatch(loginFailure('Network error'));
-            
+            // Alert.alert('登入失敗','請入正確的車輛訊息資料,並返回上一頁')
+            return
         }
       }; 
       //end:: API  
@@ -83,130 +92,100 @@ export default function LoginScreen({navigation}){
     //begin::記憶帳號
     const handleRememberUser = ()=>{
         setRememberUser(!rememberUser)
-        
     }
     //end::記憶帳號
 
 
 
     return (
-        <ScrollView className="">
+        <ScrollView>
             <ImageBackground
             source={require('../../Img/LoginPage.png')}
-            className="h-screen "   
+            className="h-screen bg-cover"   
             >
             {/* begin::主要的content畫面 */}
-            <View className=''>
-                <View className=" flex-row ">
-                    <Image
-                    source={require('../../Img/Enlogo.png')}
-                    resizeMode="contain"
-                    className="self-center">
-                    </Image>
-                </View>
-
-                <View className="py-12">
+            <View className="h-full">
+                <Image
+                source={require('../../Img/Enlogo.png')}
+                resizeMode="contain"
+                className="self-center">
+                </Image>
+                <View className="mt-4">
                     <Text
-                    className="text-3xl text-green-800 self-center">
+                    style={styles.titleBackground}
+                    className="text-3xl  self-center">
                         毒性及關注化學物質
                     </Text>
                     <Text
-                    className="text-3xl text-green-800 self-center">
+                    style={styles.titleBackground}
+                    className="text-3xl self-center">
                         小量運送軌跡紀錄系統
                     </Text>
                 </View>
-                {/* <View className="items-center py-2">
-                    <Text
-                    className='text-xl' >
-                    版本:3.1.1
-                    </Text>
-                </View> */}
+                <View className='absolute top-1/3 -translate-y-8'>
+                    <View className="flex-row justify-start left-1">
+                        <Image
+                        source={require('../../Img/LoginAccount.png')}
+                        resizeMode="cover"
+                        style={styles.logo}
+                        ></Image>
+                        <TextInput
+                            value={account}
+                            onChangeText={(text) => setAccountLocal(text)}
+                            placeholder={'帳 號'}
+                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-2 pl-1"
+                        />
+                        <View className='flex-row right-2'>
+                            <CheckBox
+                            checked={rememberUser}
+                            onPress={handleRememberUser}
+                            />
+                            <Text className="-bottom-4 right-3">記住帳號</Text>
+                        </View>
 
-                <View className="flex flex-row justify-start py-2 pl-4">
-                    <Image
-                    source={require('../../Img/LoginAccount.png')}
-                    resizeMode="contain"
-                    style={styles.logo}
-                    
-                    ></Image>
-                    <TextInput
-                        value={account}
-                        onChangeText={(text) => setAccountLocal(text)}
-                        placeholder={'帳 號'}
-                        className="w-64 px-3 py-2 border-b border-blue-300  ml-4"
-                    />
-                    <CheckBox/>
-                    <Text className="pt-3 pl-5">記住帳號</Text>
-                </View>
-                <View className="flex flex-row justify-start py-2 pl-4">
-                    <Image
-                    source={require('../../Img/LoginPassword.png')}
-                    resizeMode="contain"
-                    style={styles.logo}
-                    ></Image>
-                    <TextInput
-                        value={password}
-                        onChangeText={(text) => setPassword(text)}
-                        placeholder={'密碼'}
-                        secureTextEntry={true}
+                    </View>
+                    <View className="flex-row justify-start left-1 py-1 bottom-2">
+                        <Image
+                        source={require('../../Img/LoginPassword.png')}
+                        resizeMode="contain"
+                        style={styles.logo}
+                        ></Image>
+                        <TextInput
+                            value={password}
+                            onChangeText={(text) => setPassword(text)}
+                            placeholder={'密碼'}
+                            secureTextEntry={true}
+                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-1 pl-1"
 
-                        className="w-64 px-3 py-2 border-b border-blue-300  ml-4"
-                    />
-                </View>
-                <View className="flex flex-row justify-start py-2 pl-4">
-                    <Image
-                    source={require('../../Img/LoginPlate.png')}
-                    resizeMode="contain"
-                    style={styles.logo}
-                    className="flex-none "
-                    ></Image>
-                    <TextInput
-                        value={deviceNumber}
-                        onChangeText={(text) => setDeviceNumberLocal(text)}
-                        placeholder={'車輛號碼'}
+                        />
+                    </View>
+                    <View className="flex flex-row justify-start left-1">
+                        <Image
+                        source={require('../../Img/LoginPlate.png')}
+                        resizeMode="contain"
+                        style={styles.logo}
+                        className="flex-none "
+                        ></Image>
+                        <TextInput
+                            value={deviceNumber}
+                            onChangeText={(text) => setDeviceNumberLocal(text)}
+                            placeholder={'車輛號碼'}
+                            className="border-b border-blue-300 my-auto w-1/3 left-1 bottom-1 pl-1"
 
-                        className="w-64 px-3 py-2 border-b border-blue-300  ml-4"
-                    />
-                </View>
-                
-                
-
-                {/* 尚未開發驗證碼 */}
-                {/* <View className="flex flex-row justify-center py-2"> */}
-                <View className='flex-row mt-2 ml-4'>
-                    {/* <Image
-                    source={require('../../Img/驗證碼.png')}
-                    resizeMode="contain"
-                    style={styles.logo}
-
-                    ></Image> */}
-                    <Captcha
-                    ref={captchaRef}
-                    inputStyle={styles.inputStyle}
-                    containerStyle={styles.containerStyle}
-                    captchaContainerStyle={styles.captchaContainerStyle}
-                    refreshButtonStyle={styles.refreshButtonStyle}
-                    addSpecialCharacter={false}
-                    captchaLength={4}
-                    refreshIcon={<Text className='text-xl'>重取驗證碼</Text>}
-                    />
-                    {/* <View 
-                    className="flex-row w-64  py-2 h-[46] ml-4 pr-0">
-                    <TextInput
-                    value={captcha}
-                    onChangeText={(text) => SetCaptcha(text)}
-                    placeholder={'驗證碼'}
-                    className="flex-initial w-32 px-3 py-2 border border-blue-300 rounded-md bg-blue-50 h-[46] mr-5 "
-                    />
-                    </View> */}
-                </View>
-                {/* <View className="flex-row justify-center">
-                    <Text className="pt-3 pl-5">記憶帳號</Text>
-                    <Switch 
-                    value={rememberUser}
-                     onValueChange={handleRememberUser}
-                     />
-                </View> */}
+                        />
+                    </View>           
+                    <View className='flex-row mt-2 ml-4'>
+                        <Captcha
+                        ref={captchaRef}
+                        inputStyle={styles.inputStyle}
+                        containerStyle={styles.containerStyle}
+                        captchaContainerStyle={styles.captchaContainerStyle}
+                        refreshButtonStyle={styles.refreshButtonStyle}
+                        addSpecialCharacter={false}
+                        captchaLength={4}
+                        refreshIcon={<Text>重取驗證碼</Text>}
+                        />
+                    </View>
                 <View
                 className='flex-row mt-4 ml-4'
                 >
@@ -215,17 +194,24 @@ export default function LoginScreen({navigation}){
                 onPress={()=>{
                     handleLogin()
                 }}>
-
-                    <Text className="text-white text-3xl px-10 py-2 ">登入</Text>
+                    <Text className="text-white text-2xl px-4 py-1">登入</Text>
                 </TouchableOpacity>
+
+                {/* <Image
+                source={require('../../Img/LoginImg01.png')}
+                resizeMode="contain"
+                className=''
+                /> */}
                 </View>
+                </View>
+                
             </View>
             {/* end::主要的content畫面 */}   
             <View
-            className="bg-gray-600 absolute bottom-0 " 
+            className="bg-gray-600 absolute bottom-0 self-center" 
             >
                 <Text
-                className="text-white self-center"
+                className="text-white mx-auto"
                 >客服電話:(02)2239-3250 客服信箱:toxicgps@mail.pstcom.tw</Text>
             </View>
             </ImageBackground>
@@ -236,10 +222,11 @@ export default function LoginScreen({navigation}){
 const styles = StyleSheet.create({
     
     logo: {
-      width: 57,
-      height: 57,
+      width: 40,
+      height: 40,
     },
     inputStyle:{
+        height:40,
         borderRadius: 15,
         // backgroundColor: '#EFF6FF',
     },
@@ -249,6 +236,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
     },
     captchaContainerStyle:{
+        height:40,
         backgroundColor:'gray',
     },
     refreshButtonStyle:{
@@ -261,6 +249,8 @@ const styles = StyleSheet.create({
     loginBack:{
         backgroundColor:'#3B5C75',
         borderRadius:20,
-        
+    },
+    titleBackground:{
+        color:'#2F4151'
     }
   })

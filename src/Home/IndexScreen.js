@@ -1,8 +1,7 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { Dialog } from "@rneui/themed";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FlatList, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, MD2Colors, Text } from "react-native-paper";
 import Banner from "../Component/Banner";
 export default function IndexScreen({ navigation}) {
@@ -91,30 +90,38 @@ export default function IndexScreen({ navigation}) {
           fetchDetailData(item.SerNo); // 調用B API
         }
       }
-      className='flex-row m-6 bg-slate-200 rounded-full p-2'
+      className=' m-6 rounded-lg p-1'
+      style={style.FlatListStyle}
       >
-        <View className='w-3/12 items-center self-center'>       
-          <Text className='text-xl'>{item.StartDate}</Text>
-        </View>
-        <View className='w-1/12 items-center self-center'>
+          <Text className='text-xl left-4'>{item.StartDate}</Text>
+        {/* <View className='w-1/12 items-center self-center'>
         <MaterialIcons name="campaign" size={36} color="black"/>
-        </View>
-        <View className='w-8/12 ml-2 self-center'>
-        
-          <Text className='text-xl' >{item.Subject}</Text>
-        </View>
+        </View> */}
+
+          <Text className='text-xl left-4' >{item.Subject}</Text>
+
         
       </TouchableOpacity>
     </View>
   )
   return (
     
-    <View className="flex-1">
+    <View className='bg-white' >
       <Banner/>
+      <View className='flex-row justify-between mt-4'>
       <Text
-        className="text-4xl self-center mt-4">
+        className="text-3xl mt-4 left-4" >
             最新消息
-        </Text>
+      </Text>
+      <Image
+      source={require('../../Img/calendar.png')}
+      resizeMode="contain"
+      style={style.logo}
+      className='right-4 top-2'
+
+      ></Image>
+      </View>
+      
       
         <FlatList
           data={data} // data
@@ -137,3 +144,13 @@ export default function IndexScreen({ navigation}) {
     </View>
   );
 }
+
+const style = StyleSheet.create({
+  FlatListStyle:{
+    backgroundColor:'#F0F0F0'
+  },
+  logo:{
+    width:40,
+    height:40
+  }
+})

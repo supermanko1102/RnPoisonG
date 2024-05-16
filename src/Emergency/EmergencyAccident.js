@@ -2,7 +2,7 @@ import { Dialog } from "@rneui/themed";
 import axios from "axios";
 import * as Location from 'expo-location';
 import { useEffect, useState } from "react";
-import { Switch, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useSelector } from "react-redux";
 import Banner from "../Component/Banner";
@@ -125,39 +125,49 @@ export default function EmergencyAccident(){
     }
     //end::loading
     return(    
-    <View className='flex-1'>
+    <View className='flex-auto bg-white'>
         <Banner/>
-        <View className='grow'>
-            <Text className='text-2xl text-red-600 self-center'>
+        <View className='flex-1'>
+            {/* <Text className='text-2xl text-red-600 self-center'>
                 運送過程中若發生緊急事故,請勾選事故樣態並按下通報鍵
-            </Text>
+            </Text> */}
 
-                <View className='flex-row  self-center'>
-                    <Switch value={carSwitch} onValueChange={onToggleCarSwitch} />
-                    <Text>車輛故障</Text>
-                    <Switch value={accidentSwitch} onValueChange={onToggleAccidentSwitch} />
-                    <Text>發生車禍</Text>
+                <View className='flex-row justify-between w-8/12 self-center'>
+                    <View className='flex-row mt-2'>
+                        <Switch className='top-1' value={carSwitch} onValueChange={onToggleCarSwitch} />
+                        <Text className='text-xl pt-2'>車輛故障</Text>
+                    </View>
+                    <View className='flex-row mt-2'>
+                        <Switch className='top-1' value={accidentSwitch} onValueChange={onToggleAccidentSwitch} />
+                        <Text className='text-xl pt-2'>發生車禍</Text>
+                    </View>
                 </View>
                 
-                <View className='flex-row self-center mt-5'>
-                    <Switch value={itemSwitch} onValueChange={onToggleItemSwitch} />
-                    <Text>貨物掉落</Text>
-                    <Switch value={toxicSwitch} onValueChange={onToggleToxicSwitch} />
-                    <Text>毒化物外洩</Text>
+                <View className='flex-row justify-between w-8/12 self-center'>
+                    <View className='flex-row mt-2'>
+                        <Switch className='top-1' value={itemSwitch} onValueChange={onToggleItemSwitch} />
+                        <Text className='text-xl pt-2'>貨物掉落</Text>
+                    </View>
+                    <View className='flex-row mt-2'>
+                        <Switch className='top-1' value={toxicSwitch} onValueChange={onToggleToxicSwitch} />
+                        <Text className='text-xl pt-2'>物質外洩</Text>
+                    </View> 
                 </View>
 
-                <TouchableOpacity className='self-center my-5 bg-sky-500 '
+                <TouchableOpacity 
+                style={styles.buttonBackground}
+                className='self-center rounded-full'
                 onPress={()=>{
                     // Add_Emergency_GPSByPhone()
                     toggleDialog()
                 }}
                 >
-                    <Text className='text-2xl'>
-                        申報
+                    <Text className='text-xl text-white p-2'>
+                        緊急通報
                     </Text>
                 </TouchableOpacity>
 
-                <View className='w-11/12 self-center mt-2 mb-2' style={{flex:1}}>
+                <View className='w-11/12 self-center flex-1 mt-1'>
                     {/* <MyMapScreen/> */}
                     <CurrentLocalMap location={location}/>
                 </View>
@@ -177,3 +187,9 @@ export default function EmergencyAccident(){
     </View>
     )
 }
+
+const styles= StyleSheet.create({
+    buttonBackground:{
+        backgroundColor:'#3B5C75'
+    }
+})

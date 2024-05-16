@@ -1,8 +1,6 @@
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
-
 export default function Banner(){
 
 
@@ -18,35 +16,91 @@ export default function Banner(){
         // console.log('BannerNavigation',navigation)
         navigation.navigate("Login");
     }
+    const handleGoBack = () =>{
+        navigation.goBack()
+    }
     return(
-        <View className="mt-[60]">
-            <View >
+        <ImageBackground
+        source={require('../../Img/inner-bg.png')}
+        resizeMode="cover"
+        >   
+            <View className='flex-row  '>
+                <TouchableOpacity
+                    onPress={handleGoBack}
+                    style={styles.bannerLogout}
+                    className='left-2 top-2 w-1/5'
+                >
+                        <Image
+                        source={require('../../Img/Previous-w.png')}
+                        style={styles.BannerLogo}
+                        ></Image>
+                </TouchableOpacity>
                 <Image
-                source={require('../../Img/Enlogo.png')}
-                resizeMode="contain"
-                className="self-center">
+                    source={require('../../Img/Enlogo.png')}
+                    resizeMode="contain"
+                    className='w-4/5 mx-auto'
+                >
                 </Image> 
             </View>
 
-            <View className="flex-row pt-10 justify-start ml-10">
-                <FontAwesome name="user" size={30} color="black" />
+
+            <View
+            style={styles.BannerDetail} 
+            className="flex-row py-2 justify-between w-11/12 self-center top-4 ">
+                {/* <FontAwesome name="user" size={30} color="black" /> */}
+                <View className='flex-row pt-4'>
+                <Image
+                style={styles.BannerLogo}
+                source={require('../../Img/user-w.png')}
+                className='bottom-3 left-2 '
+                ></Image>
                 <Text
-                className="text-xl mr-10"
+                className="text-xl text-white left-3 bottom-1"
                 >{userName}</Text>
-
-                <FontAwesome5 name="car" size={30} color="black" />
+                </View>
+                
+                <View className='flex-row mt-auto'>
+                <Image
+                style={styles.BannerLogo}
+                source={require('../../Img/carplate-w.png')}
+                className='bottom-3 '
+                ></Image>
                 <Text
-                className="text-xl"
-                >{deviceNumber}</Text>
-
+                className="text-xl text-white left-3 bottom-1"
+                >{deviceNumber}
+                </Text>
+                </View>
+                {/* <FontAwesome5 name="car" size={30} color="black" /> */}
+                
                 <TouchableOpacity
-                className="bg-gray-300 rounded-lg ml-8"
                 onPress={handleLogout}
+                className='mt-auto bottom-3 right-4'
                 >
-                    <Text className='text-xl text-red-600'>登出</Text>
+                    <Image
+                    style={styles.BannerLogo}
+                    source={require('../../Img/Signout-w.png')}
+                    ></Image>   
+                    {/* <Text className='text-xl text-red-600'>登出</Text> */}
                 </TouchableOpacity>
             </View>
 
-        </View>
+        </ImageBackground>
     )
 }
+const styles = StyleSheet.create(
+    {
+        BannerDetail:{
+            backgroundColor:'#496289',
+            borderRadius:20,
+        },
+        BannerLogo:{
+            width: 40,
+            height: 40,
+        },
+        bannerLogout:{
+            width: 40,
+            height: 40,
+        }
+
+    }
+)

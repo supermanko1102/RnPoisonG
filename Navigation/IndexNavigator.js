@@ -1,12 +1,12 @@
-import { AntDesign, Fontisto, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Image } from "react-native";
 // import IndexScreen from "../src/Home/IndexScreen";
+import { StyleSheet } from "react-native";
 import CarriageScreen from "../src/Home/CarriageScreen";
 import EmergencyScreen from "../src/Home/EmergencyScreen";
 import FormScreen from "../src/Home/FormScreen";
 import IndexScreen from "../src/Home/IndexScreen";
 import VehiclecyScreen from "../src/Home/VehicleScreen";
-
 export default function IndexNavigator({navigation}) {
   // const dispatch= useDispatch()
   const Tab = createBottomTabNavigator();
@@ -18,9 +18,9 @@ export default function IndexNavigator({navigation}) {
      <Tab.Navigator
      screenOptions={({ route }) => ({
        headerShown: false,
-       tabBarActiveTintColor: "tomato",
-       tabBarInactiveTintColor: "gray",
-       tabBarStyle: { height: 60, paddingBottom: 10 },
+       tabBarActiveTintColor: "#399584",
+       tabBarInactiveTintColor: "#4EA091",
+       tabBarStyle: { height: 100, paddingBottom: 10 ,backgroundColor:'#f9f9f9'},
      })}
    >
     <Tab.Screen
@@ -31,9 +31,12 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-            <Ionicons name="home" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/home-1.png')}/>
+            // <Ionicons name="home" size={24} color="black" />
            ) : (
-             <Ionicons name="home-outline" size={size} color={color} />
+            //  <Ionicons name="home-outline" size={size} color={color} />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/home-2.png')}/>
+
            ),
        }}
      />
@@ -45,9 +48,11 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-            <Ionicons name="car" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/transport-1.png')}/>
+            // <Ionicons name="car" size={24} color="black" />
            ) : (
-            <Ionicons name="car-outline" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/transport-2.png')}/>
+            // <Ionicons name="car-outline" size={24} color="black" />
            ),
        }}
      />
@@ -59,9 +64,11 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-            <MaterialCommunityIcons name="format-align-justify" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/list-1.png')}/>
+            //<MaterialCommunityIcons name="format-align-justify" size={24} color="black" />
            ) : (
-            <AntDesign name="form" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/list-2.png')}/>
+            //<AntDesign name="form" size={24} color="black" />
            ),
        }}
      />
@@ -73,9 +80,11 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-            <MaterialIcons name="contact-emergency" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/urgent-1.png')}/>
+            //<MaterialIcons name="contact-emergency" size={24} color="black" />
            ) : (
-            <MaterialIcons name="emergency" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/urgent-2.png')}/>
+            //<MaterialIcons name="emergency" size={24} color="black" />
            ),
        }}
      />
@@ -87,12 +96,24 @@ export default function IndexNavigator({navigation}) {
          unmountOnBlur: true,
          tabBarIcon: ({ focused, color, size }) =>
            !focused ? (
-            <MaterialIcons name="rate-review" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/inspection-1.png')}/>
+            //<MaterialIcons name="rate-review" size={24} color="black" />
            ) : (
-            <Fontisto name="preview" size={24} color="black" />
+            <Image style={style.navigatorlogo} source={require('../Img/Navigator/inspection-2.png')}/>
+            //<Fontisto name="preview" size={24} color="black" />
            ),
        }}
      />
    </Tab.Navigator>
   );
 }
+
+const style= StyleSheet.create({
+  navigatorlogo:{
+    width:47,
+    height:47
+  },
+  navigatorBackground:{
+    backgroundColor:'#4EA091'
+  }
+})

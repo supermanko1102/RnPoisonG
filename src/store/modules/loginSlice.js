@@ -9,6 +9,7 @@ const loginSlice  = createSlice({
     token: null,
     error: null,
     account: '',
+    password:'',
     deviceNumber: '',
     userName: ''
     },
@@ -18,11 +19,6 @@ const loginSlice  = createSlice({
             state.isLogin = true;
             state.token = action.payload;
             state.error = null;
-        },
-        loginFailure: (state, action) => {
-            state.isLogin = false;
-            state.token = null;
-            state.error = action.payload;
         },
         logout: (state) => {
             state.isLogin = false;
@@ -38,13 +34,16 @@ const loginSlice  = createSlice({
         setAccount(state, action) {
             state.account = action.payload;
         },
+        setPassword(state, action) {
+            state.password = action.payload;
+        },
     }
 })
 //解構出創建action對象的函數  {action creater}
-const {loginSuccess, loginFailure,logout,setDeviceNumber,setUserName,setAccount} = loginSlice.actions
+const {loginSuccess, logout,setDeviceNumber,setUserName,setAccount,setPassword} = loginSlice.actions
 
 // get reducer 
 const userReducer = loginSlice.reducer
 //export action and reducer
-export { loginFailure, loginSuccess, logout, setAccount, setDeviceNumber, setUserName };
+export { loginSuccess, logout, setAccount, setDeviceNumber, setPassword, setUserName };
 export default userReducer

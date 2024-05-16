@@ -1,5 +1,5 @@
-import { Text, View } from "react-native";
-import { Button } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Banner from "../Component/Banner";
 export default function CarriageScreen({navigation}){
     const handleStartReport = ()=>{
@@ -9,24 +9,50 @@ export default function CarriageScreen({navigation}){
         navigation.navigate('PathTracking')
     }
 return (   
-    <View
-   
-    >
+    <View>
         <Banner/> 
-        <Button mode="contained"
-        className="mt-40" 
+        <TouchableOpacity
+        className="self-center w-10/12 my-10 " 
         onPress={handleStartReport}
-        >
-            <Text className="text-white text-xl px-5 py-3">開始申報</Text>
-        </Button>    
-        <Button mode="contained"
-        className="my-20" 
+        >        
+            <LinearGradient
+            colors={['#d8f5ff','#a6d4ff']}
+            start={[0,1]}
+            end={[1,0]}
+            className='rounded-full h-14'
+            //style={style.buttonGradient}
+            >
+                <Text className="text-black text-xl mx-auto my-auto ">開始申報</Text>
+            </LinearGradient>
+        </TouchableOpacity>    
+        <TouchableOpacity 
+        className="self-center w-10/12 top-4" 
         onPress={handlePathTracking}
-        >
-            <Text className="text-white text-xl px-5 py-3 ">今日已申報軌跡查詢</Text>
-        </Button>    
+        >   
+            <LinearGradient
+            colors={['#d8f5ff','#a6d4ff']}
+            start={[0,1]}
+            end={[1,0]}
+            className='rounded-full h-14'
+            //style={style.buttonGradient}
+            >
+                <Text className="text-black text-xl mx-auto my-auto ">今日已申報軌跡查詢</Text>            
+            </LinearGradient>
+        </TouchableOpacity>    
             
     </View>
 )
 }
 
+const style = StyleSheet.create({
+    buttonStyle:{
+        padding: 15,
+    // alignItems: 'center',
+    borderRadius: 5,
+    },
+    buttonGradient: {
+        padding: 15,
+        // alignItems: '',
+        borderRadius: 5,
+      },
+})

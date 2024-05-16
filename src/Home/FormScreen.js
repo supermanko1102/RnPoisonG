@@ -1,8 +1,10 @@
 import axios from "axios";
+import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
-import { Button } from "react-native-paper";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
+
+
 import Banner from "../Component/Banner";
 export default function FormScreen({navigation}){
 
@@ -37,15 +39,23 @@ export default function FormScreen({navigation}){
     }
     
     //取得渲染函數
+    //把每個表單的資料傳過去
     const renderItem= ({item})=>(
         <View
         className='mt-4'
         >
-            <Button 
-            mode='contained'
-            // 這邊把每個表單的資料傳過去
-            onPress={() => handleTrackResult(item)}>
-            <Text className='text-white'>{item.listno}</Text></Button>
+            <TouchableOpacity 
+            className="self-center w-10/12 my-2 " 
+            onPress={() => handleTrackResult(item)}
+            >
+                <LinearGradient
+                colors={['#d8f5ff','#a6d4ff']}
+                start={[0,1]}
+                end={[1,0]}
+                className='rounded-full h-10'>
+                    <Text className='text-black text-xl mx-auto my-auto '>{item.listno}</Text>
+                </LinearGradient>
+            </TouchableOpacity>
         </View>
     )
     return(

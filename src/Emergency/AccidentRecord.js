@@ -1,12 +1,10 @@
 
-import { FlatList, Text, View } from "react-native"
-
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { Button } from "react-native-paper"
-import { useSelector } from "react-redux"
-import Banner from "../Component/Banner"
-import Footer from "../Component/Footer"
+import axios from "axios";
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
+import Banner from "../Component/Banner";
 
 
 export  default function AccidentRecord ({navigation}){
@@ -45,35 +43,36 @@ export  default function AccidentRecord ({navigation}){
 
     //取得渲染函數
     const renderItem= ({item})=>(
-        <View
-        className='mt-4'
-        >
-            <Button 
-            mode='contained'
+        <View>
+            <TouchableOpacity 
             // 這邊把每個表單的資料傳過去
+            className="self-center w-10/12 my-4 " 
             onPress={()=> handleEmergencyResult(item)}
             >
-            <Text className='text-white'>{item.ReturnTime}</Text></Button>
+                <LinearGradient
+                colors={['#d8f5ff','#a6d4ff']}
+                start={[0,1]}
+                end={[1,0]}
+                className='rounded-full h-10'
+                >
+                    <Text className="text-black text-xl mx-auto my-auto">{item.ReturnTime}</Text>
+                </LinearGradient>
+            </TouchableOpacity>
         </View>
     )
 
 
     return(
-        <View className='flex-1'>
+        <View>
             <Banner/>
-            <View className='grow bg-red-200 h-3/5'>
-                    <Text className='text-red-400 text-2xl self-center'>事故通報結果查詢</Text>
+            <View className=''>
+                    <Text className='text-black text-2xl self-center mt-4'>事故通報紀錄查詢</Text>
                 <FlatList
                     data={data} // data
                     renderItem={renderItem} // 選染列表的函數
                     keyExtractor={item => item.ReturnTime} // key
                 />
-                {/* 地圖區 */}
-                {/* <View>
-                    <EmergencyLocationMap/>
-                </View> */}
             </View>
-            <Footer/>
         </View>
         
     )

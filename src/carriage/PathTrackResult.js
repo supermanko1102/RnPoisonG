@@ -1,25 +1,24 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { View } from "react-native"
-import { ActivityIndicator, MD2Colors, Text } from "react-native-paper"
+import { Text, View } from "react-native"
+import { ActivityIndicator, MD2Colors } from "react-native-paper"
 import Banner from "../Component/Banner"
-import Footer from "../Component/Footer"
 import FormTrackMap from "../Component/FormTrackMap"
 export default function PathTrackResult({route}){
     const NotYetGetAPI={
-        listno:'還沒拿到',
-        Plate_no:'還沒拿到',
-        FromLat:'還沒拿到',
-        FromLon:'還沒拿到',
-        FromTime:'還沒拿到',
-        ToLat:'還沒拿到',
-        ToLon:'還沒拿到',
-        ToTime:'還沒拿到',
+        listno:'無資料',
+        Plate_no:'無資料',
+        FromLat:'無資料',
+        FromLon:'無資料',
+        FromTime:'無資料',
+        ToLat:'無資料',
+        ToLon:'無資料',
+        ToTime:'無資料',
     }
     const {listno}  = route.params
     console.log('表單編號',)
     const[trackResult,setTrackResult]=useState('')
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     //設定一個loading狀態
     const[loading,setLoading] = useState(true)   
     //begin::Get API
@@ -62,56 +61,50 @@ export default function PathTrackResult({route}){
     //end::GET API
 
     return(
-        <View className='flex-1'>
-        <Banner/>
-        <View className='grow'>
-        <Text
-        variant="headlineMedium"
-        className="self-center mt-4"
-        >軌跡申報結果</Text>
-
-        <View className='flex-row self-start mt-4 ml-10'>
-            <Text variant="titleLarge">
-                表單號碼: {trackResult.listno}
-            </Text>
-        </View>
-        <View className='flex-row self-start mt-4 ml-10'>
-            <Text variant="titleLarge">
-                運送車號: {trackResult.Plate_no}
-            </Text>
-        </View>
-        <View className='flex-row self-start mt-4 ml-10'>
-            <Text variant="titleLarge">
-                起運申報座標: {trackResult.FromLat},{trackResult.FromLon}
-            </Text>
-        </View>
-        <View className='flex-row self-start mt-4 ml-10'>
-            <Text variant="titleLarge">
-                起運申報時間: {trackResult.FromTime}
-            </Text>
-        </View>
-        <View className='flex-row self-start mt-4 ml-10'>
-            <Text variant="titleLarge">
-                迄運申報座標: {trackResult.ToLat},{trackResult.ToLon}
-            </Text>
-        </View>
-        <View className='flex-row self-start mt-4 ml-10'>
-            <Text variant="titleLarge">
-                迄運申報時間: {trackResult.ToTime}
-            </Text>
-        </View>
-
-
-        {/* Begin::MapView */}
-        <View 
-                className='w-11/12 self-center mt-2 mb-2'
-                style={{flex:1}}>
-                    {/* <MyMapScreen/> */}
+        <View className='flex-auto'>
+            <Banner/>
+            <View className='flex-1'>
+                <Text
+                className="self-center text-xl mt-4"
+                >
+                    軌跡申報結果
+                </Text>
+                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 py-1'>
+                    <Text className=''>
+                        表 單 號 碼: {trackResult.listno}
+                    </Text>
+                </View>
+                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text >
+                        運 送 車 號: {trackResult.Plate_no}
+                    </Text>
+                </View>
+                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text>
+                        起運申報座標: {trackResult.FromLat},{trackResult.FromLon}
+                    </Text>
+                </View>
+                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text>
+                        起運申報時間: {trackResult.FromTime}
+                    </Text>
+                </View>
+                <View className='flex-row self-center border-b border-dashed border-gray-400 w-10/12 pb-1'>
+                    <Text >
+                        迄運申報座標: {trackResult.ToLat},{trackResult.ToLon}
+                    </Text>
+                </View>
+                <View className='flex-row self-center  w-10/12 pb-1'>
+                    <Text>
+                        迄運申報時間: {trackResult.ToTime}
+                    </Text>
+                </View>
+                {/* Begin::MapView */}
+                <View 
+                className='w-11/12 self-center flex-1'>
                     <FormTrackMap listno={trackResult.listno}/>
                 </View>
-                {/* End:MapView */}
-        </View>
-        <Footer/>
+            </View>
         </View>
     )
 }

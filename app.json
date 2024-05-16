@@ -16,7 +16,10 @@
     ],
     "ios": {
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch"],
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ],
         "NSLocationUsageDescription": "啟用定位服務 才能使用定位功能",
         "NSLocationWhenInUseUsageDescription": "啟用定位服務 才能使用定位功能",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "啟用定位服務 才能使用背景定位功能",
@@ -29,17 +32,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./Img/person.png",
+        "foregroundImage": "",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
-        "ACCESS_BACKGROUND_LOCATION",        
+        "ACCESS_BACKGROUND_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
         "android.permission.FOREGROUND_SERVICE",
-        "android.permission.ACCESS_BACKGROUND_LOCATION"
+        "android.permission.FOREGROUND_SERVICE_LOCATION"
       ],
       "package": "com.alexanderko.PoisonG",
       "runtimeVersion": "1.0.0"
@@ -52,13 +56,15 @@
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PoisonG) to use your location.",
-          "isAndroidForegroundServiceEnabled":true,
-          "isAndroidBackgroundLocationEnabled":true
-
+          "isAndroidForegroundServiceEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true
         }
       ]
     ],
     "extra": {
+      "eas": {
+        "projectId": "e1ddc640-2333-4337-80a0-f574b2ce9b84"
+      }
     },
     "updates": {}
   }

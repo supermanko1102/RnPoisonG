@@ -1,4 +1,6 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import { Text, TouchableOpacity, View } from "react-native";
+
 import Banner from "../Component/Banner";
 
 export default function EmergencyScreen({navigation}){
@@ -13,25 +15,33 @@ export default function EmergencyScreen({navigation}){
         <Banner/>
             <View>
                 <TouchableOpacity
-                    className='bg-sky-500 mt-40 '
+                    className='self-center w-10/12 my-10 '
                     onPress={handleEmergencyAccident}
                 >
-                    <Text
-                        className='text-2xl'
+                    <LinearGradient
+                    colors={['#d8f5ff','#a6d4ff']}
+                    start={[0,1]}
+                    end={[1,0]}
+                    className='rounded-full h-14'
+                    //style={style.buttonGradient}
                     >
-                        通報緊急事故
-                    </Text>
+                        <Text className="text-black text-xl mx-auto my-auto ">通報緊急事故</Text>
+                </LinearGradient>
                 </TouchableOpacity>
             
                 <TouchableOpacity
-                    className='bg-sky-500 mt-40 '
+                    className='self-center w-10/12 my-10 '
                     onPress={handleAccidentRecord}
                 >
-                    <Text
-                        className='text-2xl'
+               <LinearGradient
+                    colors={['#d8f5ff','#a6d4ff']}
+                    start={[0,1]}
+                    end={[1,0]}
+                    className='rounded-full h-14'
+                    //style={style.buttonGradient}
                     >
-                        查詢通報紀錄
-                    </Text>
+                        <Text className="text-black text-xl mx-auto my-auto ">查詢通報紀錄</Text>
+                </LinearGradient>
                 </TouchableOpacity>
             </View> 
             

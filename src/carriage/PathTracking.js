@@ -5,7 +5,6 @@ import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
 import { useSelector } from 'react-redux';
 import Banner from '../Component/Banner';
-import Footer from '../Component/Footer';
 import SimpleFlatList from './SimpleFlast';
 
 export default function PathTracking({ navigation }) {
@@ -47,14 +46,11 @@ export default function PathTracking({ navigation }) {
       }
 
     return (
-        <View className='flex-1'>
+        <View className=''>
             <Banner />
-                <Text className='text-2xl self-center'>表單申報</Text>
-                <View className=' w-10/12 self-center '>
+            <Text className='text-2xl self-center mt-4'>表單申報</Text>
+            <View className='w-10/12 self-center'>
                 <SimpleFlatList data={data} onPressItem={handleTrackResult} />
-
-                <Footer className=''/>
-
             </View>
         </View>
     );
