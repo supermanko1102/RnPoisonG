@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux';
 import Banner from "../Component/Banner";
 import CurrentLocalMap from '../Component/CurrentLocalMap';
 import ReportItem from './ReportItem';
-const LOCATION_TRACKING = 'location-tracking';
-
+const LOCATION_TRACKING = 'location-background-tracking';
 export default function StartReport({navigation}) {
+
   //先拿到車輛資訊
   const carNumber = useSelector(state => state.login.deviceNumber);
   //設定目前拿到的經緯度
@@ -18,8 +18,6 @@ export default function StartReport({navigation}) {
   const [startLocation ,setStartLocation] = useState({latitude:0,longitude:0})
 
   const [errorMsg, setErrorMsg] = useState(null);
-  //背景模式下執行
-  const [locationStarted, setLocationStarted] = useState(false);
   //放置api的data
   const [dataFrom, setDataFrom] = useState([]);
   const [dataTo, setDataTo] = useState([]);
@@ -47,12 +45,12 @@ export default function StartReport({navigation}) {
   }
   
   const fetchGetddlistByReturnTo = async()=>{
-      const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
-      params: {
-      Function: 'GetddlistByReturn',
-      ServiceKey: 'V9achV7sd8AK',
-      Plate_no: carNumber,
-      declareType:'To'
+    const res = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx', {
+    params: {
+    Function: 'GetddlistByReturn',
+    ServiceKey: 'V9achV7sd8AK',
+    Plate_no: carNumber,
+    declareType:'To'
     }
   });
   const modifyList = res.data.DTddlist.map(item =>{
@@ -65,32 +63,59 @@ export default function StartReport({navigation}) {
     // console.log('fetchGetddlistByReturnTo',modifyList)
 
   }
-
-    fetchGetddlistByReturnFrom()
-    fetchGetddlistByReturnTo()
+  fetchGetddlistByReturnFrom()
+  fetchGetddlistByReturnTo()
   },[]);
   //end::
+
   //being::拿經緯度
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    // console.log('請求前台',status)
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      Alert.alert('拒絕使用經位度');
+      return;
+    } else{
+      let backgroundPermission = await Location.requestBackgroundPermissionsAsync();
+      if (backgroundPermission.status !== 'granted') {
+        setErrorMsg('Permission to access background location was denied');
+        console.log('請求後台',backgroundPermission.status)
+        Alert.alert('拒絕使用背景經位度');
+        return;
+      }
+    }       
+    let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
+    console.log('當前的經緯度', location);
+    setStartLocation({
+      ...startLocation,
+      latitude:location.coords.latitude,
+      longitude:location.coords.longitude
+    });
+    setCurrentLocation({
+      ...currentLocation,
+      latitude:location.coords.latitude,
+      longitude:location.coords.longitude
+    });
+    setLoading(false);
+  } 
   const startLocationTracking = async () => {
     await Location.startLocationUpdatesAsync(LOCATION_TRACKING, {
         accuracy: Location.Accuracy.Highest,
         timeInterval: 5000,
         distanceInterval:0,
-        // showsBackgroundLocationIndicator: true,
-        foregroundService: {
-          notificationTitle: '正在使用你的app',
-          notificationBody: '想要關閉,請直接把app關掉',
-      },
-    });
+        showsBackgroundLocationIndicator: true,
+      });
     const hasStarted = await Location.hasStartedLocationUpdatesAsync(
         LOCATION_TRACKING
     );
-    setLocationStarted(hasStarted);
-    console.log('有成功執行獲取經緯度嗎?', hasStarted);
-  };
-  if(locationStarted){  
-    TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
-      console.log('TaskManagerHasWork')
+    // console.log('有成功獲取經緯度嗎?', hasStarted); 
+    // console.log('任務管理器有被定義嗎 ?', TaskManager.isTaskDefined(LOCATION_TRACKING));
+    // TaskManager.defineTask(LOCATION_TRACKING, ()=>{
+    //   console.log('location-background-tracking是否有執行')
+    //   return 
+    // })
+    TaskManager.defineTask(LOCATION_TRACKING, async({ data, error }) => {
       if (error) {
           console.log('LOCATION_TRACKING task ERROR:', error);
           return;
@@ -105,80 +130,36 @@ export default function StartReport({navigation}) {
             latitude:lat,
             longitude:long
           })
-            console.log("location是",currentLocation.latitude,currentLocation.longitude)
+          //console.log("location是",currentLocation.latitude,currentLocation.longitude)
       }
-    }); 
-  }
-
-  const stopLocation = ()=>{
-    setLocationStarted(false)
-    TaskManager.isTaskRegisteredAsync(LOCATION_TRACKING).then
-    ((tracking)=>{
-      if(tracking){
-        Location.stopLocationUpdatesAsync(LOCATION_TRACKING);
-      }
-    })
-  }
+    });
+  };
+  // const stopLocationTracking = ()=>{
+  //   TaskManager.isTaskRegisteredAsync(LOCATION_TRACKING).then
+  //   ((tracking)=>{
+  //     if(tracking){
+  //       Location.stopLocationUpdatesAsync(LOCATION_TRACKING);
+  //     }
+  //   })
+  // }
+  startLocationTracking()
 
   useEffect(() => {
-    const getLocation = async () => {
-      try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        console.log('請求前台',status)
-        if (status !== 'granted') {
-          setErrorMsg('Permission to access location was denied');
-          Alert.alert('拒絕使用經位度');
-          return;
-        }
-        // 請求後台
-        let backgroundPermission = await Location.requestBackgroundPermissionsAsync();
-        console.log('請求後台',backgroundPermission.status)
-        if (backgroundPermission.status !== 'granted') {
-          setErrorMsg('Permission to access background location was denied');
-          Alert.alert('拒絕使用背景經位度');
-          return;
-        }
-          let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
-          console.log('現在的經緯度', location);
-         setStartLocation({
-          ...startLocation,
-          latitude:location.coords.latitude,
-          longitude:location.coords.longitude
-         });
-         setCurrentLocation({
-          ...startLocation,
-          latitude:location.coords.latitude,
-          longitude:location.coords.longitude
-         });
-         setLoading(false);
-      } catch (error) {
-        console.error('Error getting location:', error);
-        setErrorMsg('Error getting location');
-      }
-    };
-
-    //
-    startLocationTracking()
     getLocation();
-  
-    //const intervalId = setInterval(getLocation, 4000);
-  
-    // return () => {
-    //   clearInterval(intervalId);
-    // };
   }, []);
+  
+  //end::拿經緯度
 
-//end::拿經緯度
-//begin::loading
-if(loading){
-  return (<View className='flex-1 justify-center items-center'>
-     <ActivityIndicator animating={true} size='large' color={MD2Colors.red800} />
-     <Text>獲取經緯度中</Text>
-     </View>
-  )
-}
-//end::loading
-//begin::merge from &&to datalist
+  //begin::loading
+  if(loading){
+    return (<View className='flex-1 justify-center items-center'>
+      <ActivityIndicator animating={true} size='large' color={MD2Colors.red800} />
+      <Text>獲取經緯度中</Text>
+      </View>
+    )
+  }
+  //end::loading
+  //begin::merge from &&to datalist
   const allListnos = new Set([...dataTo.map(item => item.listno), ...dataFrom.map(item => item.listno)]);
   const mergedList = Array.from(allListnos).map(listno => 
   {
@@ -190,14 +171,13 @@ if(loading){
       ReturnTimeTo: (itemTo && itemTo.ReturnTimeTo) || ''
   };
   });
-//end::merge from && to datalist
+  //end::merge from && to datalist
   const renderItem = ({ item }) => 
   <ReportItem 
   item={item} 
   location={currentLocation}
   startLocation={startLocation} 
   startGetBackgroundLocation={startLocationTracking} 
-  stopGetBackgroundLocation={stopLocation}
   />; // 把每一個datalist 做component
 
   return (        
@@ -216,7 +196,6 @@ if(loading){
         </View>
         <View 
         className='w-11/12 self-center flex-1' 
-        // style={{flex:1}}
         >
           <CurrentLocalMap location={currentLocation}
           />

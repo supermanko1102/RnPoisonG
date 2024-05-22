@@ -9,9 +9,9 @@ export default function LoginScreen({navigation}){
     //如果需要從元件中去改變store裡面的數據需要 dispatch
     // 1. 導入action對象的方法 -> 2.使用dispatch() -> 3. 調用dispatch提交action
     const dispatch =useDispatch()
-    const [account, setAccountLocal] = useState('G0000001');
-    const [password, setPassword] = useState('cindy701');
-    const [deviceNumber,setDeviceNumberLocal] = useState('ABC-001')
+    const [account, setAccountLocal] = useState('');
+    const [password, setPassword] = useState('');
+    const [deviceNumber,setDeviceNumberLocal] = useState('')
     const [rememberUser,setRememberUser]= useState(true)
     // const [userName,SetUserNameLocal]= useState('')
     //記憶帳號

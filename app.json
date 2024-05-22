@@ -17,9 +17,7 @@
     "ios": {
       "infoPlist": {
         "UIBackgroundModes": [
-          "location",
-          "fetch"
-        ],
+          "location", "fetch", "remote-notification"],
         "NSLocationUsageDescription": "啟用定位服務 才能使用定位功能",
         "NSLocationWhenInUseUsageDescription": "啟用定位服務 才能使用定位功能",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "啟用定位服務 才能使用背景定位功能",
