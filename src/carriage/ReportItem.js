@@ -83,6 +83,10 @@ export default function ReportItem({ item ,location,startLocation,startGetBackgr
         default:
     }},[])
     //eng::
+    useEffect(()=>{
+    AddGPSByPhone(locationRef.current.longitude,locationRef.current.latitude)
+
+    },[locationRef.current.longitude,locationRef.current.latitude])
     //begin::申報起迄運API
     const Add_ddlist_GPSByPhone = async (StartorEnd)=>{
         const StartPoint = await axios.get('https://toxicgps.moenv.gov.tw/TGOSGisWeb/ToxicGPS/ToxicGPSApp.ashx',{
@@ -119,7 +123,7 @@ export default function ReportItem({ item ,location,startLocation,startGetBackgr
         });
         // const longitude = locationRef.current.longitude;
         // const latitude = locationRef.current.latitude
-        //console.log('我是軌跡api現在經緯度',longitude,latitude)
+        console.log('我是軌跡api現在經緯度',longitude,latitude)
     }
     //end::抓軌跡API
     //begin::刪除起迄運API
@@ -176,12 +180,13 @@ export default function ReportItem({ item ,location,startLocation,startGetBackgr
         setCurrentTimeFrom(formatTime(UpdataTime))
         // //end:: get current date tiem
         // 定時呼叫
-        const intervalId = setInterval(()=>{
-             AddGPSByPhone(locationRef.current.longitude,locationRef.current.latitude)
-            // console.log('我要開始申報時的intervalId',intervalId)
-             //console.log('在setinterval下經位度',locationRef.current.longitude,locationRef.current.latitude)
-        },4000)
-         setIntervalId(intervalId)
+        AddGPSByPhone(locationRef.current.longitude,locationRef.current.latitude)
+        // const intervalId = setInterval(()=>{
+           
+        //     // console.log('我要開始申報時的intervalId',intervalId)
+        //      //console.log('在setinterval下經位度',locationRef.current.longitude,locationRef.current.latitude)
+        // },1000)
+        //  setIntervalId(intervalId)
         // AddGPSByPhone()
         }else{
             Alert.alert('無法回傳至主機')

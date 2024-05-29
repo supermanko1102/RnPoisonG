@@ -17,16 +17,19 @@
     "ios": {
       "infoPlist": {
         "UIBackgroundModes": [
-          "location", "fetch", "remote-notification"],
+          "location",
+          "fetch",
+          "remote-notification"
+        ],
         "NSLocationUsageDescription": "啟用定位服務 才能使用定位功能",
         "NSLocationWhenInUseUsageDescription": "啟用定位服務 才能使用定位功能",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "啟用定位服務 才能使用背景定位功能",
         "NSLocationAlwaysUsageDescription": "啟用定位服務 才能使用背景定位功能"
       },
-      "bundleIdentifier": "PoisonGIos01",
       "runtimeVersion": {
         "policy": "appVersion"
-      }
+      },
+      "bundleIdentifier": "PoisonG0.0.1"
     },
     "android": {
       "adaptiveIcon": {
@@ -61,7 +64,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "e1ddc640-2333-4337-80a0-f574b2ce9b84"
+        "projectId": "5f809de9-8fe6-4500-a2c6-f07d6f7fc648"
       }
     },
     "updates": {}
